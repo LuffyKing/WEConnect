@@ -33,22 +33,6 @@ yarn buildProd
 yarn test
 ```
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Deployment
 
 Deplying to heroku https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app
