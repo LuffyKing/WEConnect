@@ -11,147 +11,146 @@
     <title>Register A Business</title>
     <link rel="stylesheet" href="base.css">
   </head>
-  <body>
-    <nav class="navbar navbar-expand-lg bg-orange navbar-light fixed-top">
-      <a class="h4 logo text-white" href="#">WeConnect</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="#" data-toggle="tooltip" data-placement="bottom" title="Register A Business"><i class="far fa-building"></i><span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tooltip" data-placement="bottom" title="Search For Businesses"><i class="fas fa-search"></i></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tooltip" data-placement="bottom" title="View My Business Profile"><i class="fas fa-eye"></i></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tooltip" data-placement="bottom" title="View My Personal Profile"><i class="far fa-user"></i></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fas fa-power-off"></i></a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div id="app">
-      <div class='container-fluid h-100'>
-        <div class='container-fluid h-100'>
-
-        <div class="row justify-content-center h-100 align-items-center">
-            <form>
-              <div class="form-group bg-orange rounded">
-                <div class="p-4">
-                  <p class='text-white text-center'>Register your business</p>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-primary">
-                          <i class="fas fa-briefcase"></i>
-                        </span>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Enter The Name Of Your Business"/>
+  <body class="body-auth">
+    <header>
+      <nav class="navbar navbar-expand-lg bg-orange navbar-light">
+        <a class="h4 logo text-white" href="#">WeConnect</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" href="register-business-page.html" data-toggle="tooltip" data-placement="bottom" title="Register A Business"><i class="far fa-building"></i><span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="search-page.html" data-toggle="tooltip" data-placement="bottom" title="Search For Businesses"><i class="fas fa-search"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="business-profile.html" data-toggle="tooltip" data-placement="bottom" title="View My Business Profile"><i class="fas fa-eye"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-toggle="tooltip" data-placement="bottom" title="View My Personal Profile"><i class="far fa-user"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fas fa-power-off"></i></a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <section class="container">
+      <div class="row justify-content-center mt-4">
+        <div class="jumbotron bg-orange">
+          <form>
+            <div class="form-group rounded">
+              <div class="p-1">
+                <p class='text-white text-center'>Register your business</p>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-primary">
+                        <i class="fas fa-briefcase"></i>
+                      </span>
                     </div>
+                    <input type="text" class="form-control" placeholder="Enter The Name Of Your Business"/>
                   </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-primary">
-                          <i class="fa fa-phone"></i>
-                        </span>
-                      </div>
-                      <input type="tel" class="form-control" placeholder="Enter Your Business Telephone Number"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-primary">
-                          <i class="fa fa-envelope"></i>
-                        </span>
-                      </div>
-                      <input type="email" class="form-control" placeholder="Enter Your Business Email Address"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-primary">
-                          <i class="fas fa-at"></i>
-                        </span>
-                      </div>
-                      <input type="url" class="form-control" placeholder="Enter Your Business Website"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <select name="category" id="industry"  class="custom-select">
-                      <option value="">Select An Industry or A Category</option>
-                      <option value="aerospace">Aerospace</option>
-                      <option value="agriculture">Agriculture</option>
-                      <option value="chemical">Chemical</option>
-                      <option value="computer">Computer</option>
-                      <option value="construction">Construction</option>
-                      <option value="energy">Energy</option>
-                      <option value="education">Education</option>
-                      <option value="entertainment">Entertainment</option>
-                      <option value="financial">Financial Services</option>
-                      <option value="food">Food</option>
-                      <option value="health">Health Care</option>
-                      <option value="hospitality">Hospitatlity</option>
-                      <option value="information">Information Technology</option>
-                      <option value="manufacturing">Manufacturing</option>
-                      <option value="mass-media">Mass Media</option>
-                      <option value="mining">Mining</option>
-                      <option value="telecommunication">Telecommunications</option>
-                      <option value="transportation">Transportation</option>
-                      <option value="water">Water</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <textarea class="form-control" rows="3" placeholder="Enter A Description Of Your Business"></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-primary">
-                          <i class="far fa-map"></i>
-                        </span>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Enter Your Street Address"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-primary">
-                          <i class="far fa-map"></i>
-                        </span>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Enter Your City"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <select id="country" name="country" class="custom-select"></select>
-                  </div>
-                  <div class="form-group">
-                    <select name="state" id="state"  class="custom-select">
-                      <option value="">Select A Sate</option>
-                    </select>
-                  </div>
-                  <button class="btn btn-primary btn-block" type="submit">Submit</button>
                 </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-primary">
+                        <i class="fa fa-phone"></i>
+                      </span>
+                    </div>
+                    <input type="tel" class="form-control" placeholder="Enter Your Business Telephone Number"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-primary">
+                        <i class="fa fa-envelope"></i>
+                      </span>
+                    </div>
+                    <input type="email" class="form-control" placeholder="Enter Your Business Email Address"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-primary">
+                        <i class="fas fa-at"></i>
+                      </span>
+                    </div>
+                    <input type="url" class="form-control" placeholder="Enter Your Business Website"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <select name="category" id="industry"  class="custom-select">
+                    <option value="">Select An Industry or A Category</option>
+                    <option value="aerospace">Aerospace</option>
+                    <option value="agriculture">Agriculture</option>
+                    <option value="chemical">Chemical</option>
+                    <option value="computer">Computer</option>
+                    <option value="construction">Construction</option>
+                    <option value="energy">Energy</option>
+                    <option value="education">Education</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="financial">Financial Services</option>
+                    <option value="food">Food</option>
+                    <option value="health">Health Care</option>
+                    <option value="hospitality">Hospitatlity</option>
+                    <option value="information">Information Technology</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="mass-media">Mass Media</option>
+                    <option value="mining">Mining</option>
+                    <option value="telecommunication">Telecommunications</option>
+                    <option value="transportation">Transportation</option>
+                    <option value="water">Water</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" placeholder="Enter A Description Of Your Business"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-primary">
+                        <i class="far fa-map"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Enter Your Street Address"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-primary">
+                        <i class="far fa-map"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Enter Your City"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <select id="country" name="country" class="custom-select"></select>
+                </div>
+                <div class="form-group">
+                  <select name="state" id="state"  class="custom-select">
+                    <option value="">Select A Sate</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary btn-block" type="submit">Submit</button>
               </div>
-            </form>
+            </div>
+          </form>
 
         </div>
       </div>
-      </div>
 
+    </section>
     </div>
     <script type="text/javascript" src="js-files/countries.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
