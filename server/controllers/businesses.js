@@ -231,29 +231,6 @@ class Businesses {
     } = req.query;
     this.calculateFilter(location, category);
     switch (this.filter) {
-      case 'Error - Double filter': {
-        return res.status(400).send({
-          message: 'Error - Double filtering, use only one.'
-        });
-      }
-      case 'CATEGORY': {
-        const filteredBusinesses = this.businesses.filter(business =>
-          business.industry === category);
-        return res.status(200).send({
-          message: 'Success - showing businesses filtered by category',
-          filteredBusinesses
-        });
-      }
-      case 'LOCATION': {
-        const filteredBusinesses = this.businesses.filter(business =>
-          `${business.street} ${business.city} ${business.state}
-          ${business.country}`.toUpperCase()
-            .includes(location.toUpperCase()));
-        return res.status(200).send({
-          message: 'Success - showing businesses filtered by location',
-          filteredBusinesses
-        });
-      }
       default: {
         return res.status(200).send({
           message: 'Success - showing businesses with no filters applied',
