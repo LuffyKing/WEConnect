@@ -1,5 +1,10 @@
+[![Build Status](https://travis-ci.org/LuffyKing/WEConnect.svg?branch=master)](https://travis-ci.org/LuffyKing/WEConnect)
+[![Coverage Status](https://coveralls.io/repos/github/LuffyKing/WEConnect/badge.svg?branch=master)](https://coveralls.io/github/LuffyKing/WEConnect?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8e715f74b9a9f218f01e/maintainability)](https://codeclimate.com/github/LuffyKing/WEConnect/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/8e715f74b9a9f218f01e/test_coverage)](https://codeclimate.com/github/LuffyKing/WEConnect/test_coverage)
+
 # WeConnect
-This exciting new project aims to create a new web app called WeConnect.WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with. The information gathered on the platform will make it easier for companies to recruit 
+This exciting new project aims to create a new web app called WeConnect.WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with. The information gathered on the platform will make it easier for companies to recruit
 employees and likewise job-seekers along with prospective employees will know what to expect before applying or joining a company/business.
 
 ### Prerequisites
@@ -51,4 +56,3 @@ Deplying to heroku https://devcenter.heroku.com/articles/getting-started-with-no
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
