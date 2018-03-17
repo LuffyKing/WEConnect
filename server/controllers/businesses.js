@@ -120,6 +120,58 @@ class Businesses {
       message: 'Error Invalid non-unique email & telephone number inputs'
     });
   }
+  /**
+  * It locates a business based on businessid and updates it based on the
+  * information posted
+  * @param {Object} req - request object containing params and body
+  * @param {Object} res - response object that conveys the result of the request
+  * @returns {Object} - response object that has a status code of either 200 and
+  * the updated business or 404 depending on whether the business is found
+  */
+  updateBusiness(req, res) {
+    const {
+      businessName,
+      telephoneNumber,
+      email,
+      businessWebsite,
+      industry,
+      description,
+      street,
+      city,
+      country,
+      state,
+      userid
+    } = req.body;
+    const { businessid } = req.params;
+    const bizSearchResult = this.findBusinessAllUsers(businessid);
+    const isValidSearchResult = !!bizSearchResult;
+    if (isValidSearchResult) {
+      const updatedBusiness = {
+        businessid,
+        userid: userid || bizSearchResult.userid,
+        email: email || bizSearchResult.email,
+        businessWebsite: businessWebsite || bizSearchResult.businessWebsite,
+        industry: industry || bizSearchResult.industry,
+        description: description || bizSearchResult.description,
+        city: city || bizSearchResult.city,
+        country: country || bizSearchResult.country,
+        street: street || bizSearchResult.street,
+        state: state || bizSearchResult.state,
+        businessName: businessName || bizSearchResult.businessName,
+        telephoneNumber: telephoneNumber || bizSearchResult.telephoneNumber,
+        lastEdited: moment()
+      };
+      const bizArrPosition = this.findBusinessArrPosition(businessid);
+      this.businesses[bizArrPosition] = updatedBusiness;
+      return res.status(200).send({
+        message: `${updatedBusiness.businessName} has been successfully updated`,
+        updatedBusiness
+      });
+    }
+    return res.status(404).send({
+      message: 'Business Not Found invalid businessid'
+    });
+  }
 
   /**
   * It locates a business based on businessid and userid provided and returns it
