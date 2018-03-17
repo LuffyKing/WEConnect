@@ -17,4 +17,9 @@ businessRouter.post('/', business.registerBusiness);
  *It creates a put route on /:businessid to work with the updateBusiness method
  */
 businessRouter.put('/:businessid', business.updateBusiness);
+/**
+ *It creates a delete route on /:businessid to work with the removeBusiness method
+ */
+businessRouter.delete('/:businessid', business.removeBusiness);
+
 export default businessRouter;

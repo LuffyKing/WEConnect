@@ -172,6 +172,26 @@ class Businesses {
       message: 'Business Not Found invalid businessid'
     });
   }
+  /**
+  * It locates a business based on businessid provided and returns it
+  * @param {Object} req - request object containing params and body
+  * @param {Object} res - response object that conveys the result of the request
+  * @returns {Object} - response object that has a status code of either 204 or
+  * 404 depending on whether the businessid is found within the list of businesses
+  */
+  removeBusiness(req, res) {
+    const {
+      businessid
+    } = req.params;
+    const bizArrPosition = this.findBusinessArrPosition(businessid);
+    if (bizArrPosition === -1) {
+      return res.status(404).send({
+        message: 'Business not found',
+      });
+    }
+    this.businesses.splice(bizArrPosition, 1);
+    return res.status(204).send();
+  }
 
   /**
   * It locates a business based on businessid and userid provided and returns it
