@@ -76,7 +76,31 @@ class Reviews extends Businesses {
       message: 'Error User or Business not found'
     });
   }
-
+  /**
+  * It gets all reviews about a business based on the businessid posted
+  * @param {Object} req - request object containing params and body
+  * @param {Object} res - response object that conveys the result of the request
+  * @returns {Object} - response object that has a status code of either 200
+  * and a list of reviews for a business or 404 depending on whether the
+  * businessid is found within the list of businesses
+  */
+  getAllReviews(req, res) {
+    const {
+      businessid
+    } = req.params;
+    const bizFound = this.findBusinessAllUsers(businessid);
+    const isValidBusiness = !!bizFound;
+    if (isValidBusiness) {
+      const reviewsForBiz = this.reviews[businessid];
+      return res.status(200).send({
+        message: `Successfully retrieved reviews for ${bizFound.businessName}`,
+        reviews: reviewsForBiz
+      });
+    }
+    return res.status(404).send({
+      message: 'Error Business not found'
+    });
+  }
   /**
   * It finds a user based on the userid supplied
   * @param {Object} userid - the id of the user
