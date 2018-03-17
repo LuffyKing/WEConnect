@@ -217,6 +217,52 @@ class Businesses {
     });
   }
   /**
+  * It locates all the businesses in the database and returns them based on filters
+  * @param {Object} req - request object containing params and body
+  * @param {Object} res - response object that conveys the result of the request
+  * @returns {Object} - response object that has a status code of either 200 and
+  * all business based on filters in the request or 400 depending on whether
+  * the double filters are part of the rquest
+  */
+  getAllBusinesses(req, res) {
+    const {
+      location,
+      category
+    } = req.query;
+    this.calculateFilter(location, category);
+    switch (this.filter) {
+      case 'Error - Double filter': {
+        return res.status(400).send({
+          message: 'Error - Double filtering, use only one.'
+        });
+      }
+      case 'CATEGORY': {
+        const filteredBusinesses = this.businesses.filter(business =>
+          business.industry === category);
+        return res.status(200).send({
+          message: 'Success - showing businesses filtered by category',
+          filteredBusinesses
+        });
+      }
+      case 'LOCATION': {
+        const filteredBusinesses = this.businesses.filter(business =>
+          `${business.street} ${business.city} ${business.state}
+          ${business.country}`.toUpperCase()
+            .includes(location.toUpperCase()));
+        return res.status(200).send({
+          message: 'Success - showing businesses filtered by location',
+          filteredBusinesses
+        });
+      }
+      default: {
+        return res.status(200).send({
+          message: 'Success - showing businesses with no filters applied',
+          businesses: this.businesses
+        });
+      }
+    }
+  }
+  /**
   * It locates a business based on businessid and userid provided and returns it
   * @param {string} businessid - the business id of the business
   * @param {string} userid - the userid attached to the business

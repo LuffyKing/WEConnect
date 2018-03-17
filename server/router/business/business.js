@@ -25,5 +25,8 @@ businessRouter.delete('/:businessid', business.removeBusiness);
  *It creates a get route on /:businessid to work with the getBusiness method
  */
 businessRouter.get('/:businessid', business.getBusiness);
-
+/**
+ *It creates a get route on / to work with the getAllBusinesses method
+ */
+businessRouter.get('/', business.getAllBusinesses);
 export default businessRouter;
