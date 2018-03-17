@@ -4,7 +4,7 @@
   "description": "A platform for connecting businesses and users",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text ./node_modules/.bin/mocha --watch --exit --require babel-core/register test/index.js",
+    "test": "nyc --reporter=html --reporter=text ./node_modules/.bin/mocha --exit --require babel-core/register test/index.js",
     "start": "nodemon server/server.js --exec babel-node --presets es2015,stage-2",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
