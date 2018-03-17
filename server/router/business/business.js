@@ -21,5 +21,9 @@ businessRouter.put('/:businessid', business.updateBusiness);
  *It creates a delete route on /:businessid to work with the removeBusiness method
  */
 businessRouter.delete('/:businessid', business.removeBusiness);
+/**
+ *It creates a get route on /:businessid to work with the getBusiness method
+ */
+businessRouter.get('/:businessid', business.getBusiness);
 
 export default businessRouter;

@@ -192,7 +192,30 @@ class Businesses {
     this.businesses.splice(bizArrPosition, 1);
     return res.status(204).send();
   }
-
+  /**
+  * It locates a business based on businessid provided and returns it
+  * @param {Object} req - request object containing params and body
+  * @param {Object} res - response object that conveys the result of the request
+  * @returns {Object} - response object that has a status code of either 200 and
+  * the found business or 404 depending on whether the businessid is found within
+  * the list of businesses
+  */
+  getBusiness(req, res) {
+    const {
+      businessid
+    } = req.params;
+    const bizSearchResult = this.findBusinessAllUsers(businessid);
+    const isValidSearchResult = !!bizSearchResult;
+    if (isValidSearchResult) {
+      return res.status(200).send({
+        message: 'Business Found',
+        business: bizSearchResult
+      });
+    }
+    return res.status(404).send({
+      message: 'Business Not Found'
+    });
+  }
   /**
   * It locates a business based on businessid and userid provided and returns it
   * @param {string} businessid - the business id of the business
