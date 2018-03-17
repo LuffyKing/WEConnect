@@ -9,7 +9,10 @@ const authRouter = express.Router();
  * It initializes an instance auth controller
  */
 const auth = new authController(users);
-
+/**
+ *It creates a post route on /login to work with the loginUser method
+ */
+authRouter.post('/login', auth.loginUser);
 /**
  *It creates a post route on /signup to work with the signupUser method
  */

@@ -16,6 +16,20 @@ class Auth {
     this.signupUser = this.signupUser.bind(this);
   }
   /**
+ * It handles logins and returns a 200 sucess message or 401 error code,
+ * depending on the validity of the the request credentials
+ * @param {Object} req - request object containing params and body
+ * @param {Object} res - response object that conveys the result of the request
+ * @returns {Object} - response object that has a status code of either 200 or 401
+ */
+  loginUser(req, res) {
+    const { email, password } = req.body;
+    if (this.hasValidCredentials(email, password)) {
+      return res.status(200).send({ message: 'Login success' });
+    }
+    return res.status(401).send({ message: 'Invalid Username/Password' });
+  }
+  /**
  * It handles signups and returns a 201 sucess message or 400 error code,
  * depending on the validity of the the request the information posted
  * @param {Object} req - request object containing params and body
