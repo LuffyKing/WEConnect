@@ -17,3 +17,4 @@ import './reviews/addReview';
 import './reviews/getAllReviews';
 import './reviews/router';
 import './badRequests/badApiRequest';
+import './middlewares/welcomeMessage';

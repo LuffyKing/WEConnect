@@ -1,10 +1,10 @@
 import express from 'express';
+import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import router from './router/index';
 import badApiRequest from './router/badRequests/badApiRequests';
-
-
+import welcomeMiddleware from './middlewares/welcomeMiddleware';
 /**
  * It initializes an express instance
  */
@@ -27,6 +27,14 @@ app.use(bodyParser.json());
  * It setups the server to handle only json and not url encoded data
  */
 app.use(bodyParser.urlencoded({ extended: false }));
+/**
+ * Logging requests to the console via morgan on a dev setting
+ */
+app.use(morgan('dev'));
+/**
+ * Middleware for welcome message  on the '/' route
+ */
+app.get('/', welcomeMiddleware);
 /**
  * Middleware that allows the server to use the express router that handles
  * auth, business and review, the uses the router along the /api/v1
