@@ -3,7 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import authRouter from './auth/auth';
 import businessRouter from './business/business';
 import reviewRouter from './review/review';
-import swaggerDocument from '../controllers/yaml/swaggerDocument';
+import swaggerDocument from '../swagger/swaggerDocument';
 /**
  * It initializes an express router
  */
