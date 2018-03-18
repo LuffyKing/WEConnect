@@ -1,7 +1,9 @@
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
 import authRouter from './auth/auth';
 import businessRouter from './business/business';
 import reviewRouter from './review/review';
+import swaggerDocument from '../controllers/yaml/swaggerDocument';
 /**
  * It initializes an express router
  */
@@ -19,5 +21,10 @@ router.use('/businesses', businessRouter);
  * /businesses/:businessid/reviews route
  */
 router.use('/businesses/:businessid/reviews', reviewRouter);
+/**
+  * Middleware for the API docs documented by swagger along the /api-docs
+  * route
+  */
+router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 export default router;

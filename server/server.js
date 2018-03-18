@@ -1,7 +1,5 @@
-import swaggerUi from 'swagger-ui-express';
-import cors from 'cors';
-import YAML from 'yamljs';
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import router from './router/index';
 import badApiRequest from './router/badRequests/badApiRequests';
@@ -12,16 +10,15 @@ import badApiRequest from './router/badRequests/badApiRequests';
  */
 const app = express();
 /**
+ * cross origin resource sharing enabled where the CORS header is passed
+ * and request origin is reflected
+ */
+app.use(cors({ credentials: true, origin: true }));
+/**
  * It setups the port to listen on the default 8081 or a port specified
  * by the environment variable
  */
 const port = process.env.PORT || 8081;
-/**
- * It setups the API documenation using Swagger
- */
-const swaggerDocument = YAML.load(`${process.cwd()}/server/swagger.yaml`);
-app.use(cors({ credentials: true, origin: true }));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 /**
  * It setups the server to parse json data it receives
  */
