@@ -40,7 +40,7 @@ paths:
         201:
           description: "successfully created a new user"
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/UserSignupRes"
         400:
           description: "Error Required Fields can not be empty. / Error Non-Unique Email Or Mobile."
 
@@ -246,6 +246,28 @@ definitions:
         type: "string"
       mobile:
         type: "string"
+    xml:
+      name: "UserSignup"
+  UserSignupRes:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      password:
+        type: "string"
+      mobile:
+        type: "string"
+      userid:
+        type: "string"
+        format: "uuid"
+      dateCreated:
+        type: "string"
+        format: "date"
     xml:
       name: "UserSignup"
   UserSignin:
