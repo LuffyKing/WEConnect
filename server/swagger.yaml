@@ -1,0 +1,437 @@
+swagger: "2.0"
+info:
+  description: "This is the server built for the WeConnect platform.WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with. The information gathered on the platform will make it easier for companies to recruit employees and likewise job-seekers along with prospective employees will know what to expect before applying or joining a company/business."
+  version: "1.0.0"
+  title: "WeConnect"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "weconnect1993.herokuapp.com"
+basePath: "/api/v1"
+tags:
+- name: "auth"
+  description: "APIs for logging into the app and signing up on the app"
+- name: "businesses"
+  description: "APIs for filtering, accessing, registering and deleting businesses"
+- name: "reviews"
+  description: "APIs for accessing and adding reviews about businesses"
+schemes:
+- "http"
+paths:
+  /auth/signup:
+    post:
+      tags:
+      - "auth"
+      summary: "Register a user"
+      operationId: "signupUser"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New user that needs to be added to the database"
+        required: true
+        schema:
+          $ref: "#/definitions/UserSignup"
+      responses:
+        201:
+          description: "successfully created a new user"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Error Required Fields can not be empty. / Error Non-Unique Email Or Mobile."
+
+
+  /auth/login:
+    post:
+      tags:
+      - "auth"
+      summary: "Login to the WeConnect"
+      operationId: "loginUser"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User that needs to be gain access to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/UserSignin"
+      responses:
+        200:
+          description: "Login success"
+
+  /businesses:
+    post:
+      tags:
+      - "businesses"
+      summary: "Registers a new business"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Business to be registered"
+        required: true
+        schema:
+          $ref: "#/definitions/BusinessRegister"
+      responses:
+        200:
+          description: "successfully created a new business"
+          schema:
+            $ref: "#/definitions/BusinessRegisterRes"
+
+        400:
+          description: "Error All Required fields must be filled / Error Invalid non-unique email & telephone number inputs"
+    get:
+      tags:
+      - "businesses"
+      summary: "Find all the businesses on WeConnect"
+      description: ""
+      operationId: "getAllBusiness"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "location"
+        in: "query"
+        description: "filter businesses by locations"
+        type: "string"
+      - name: "category"
+        in: "query"
+        description: "filter businesses by category"
+        type: "string"
+      responses:
+        200:
+          description: "Success - showing businesses with no filters applied / Success - showing businesses filtered by location / Success - showing businesses filtered by category"
+          schema:
+            $ref: "#/definitions/ArrayOfBizRes"
+        400:
+          description: "Error - Double filtering, use only one filter."
+
+  /businesses/{businessId}:
+    get:
+      tags:
+      - "businesses"
+      summary: "Find a business by its businessId"
+      description: ""
+      operationId: "getBusinessId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "businessId"
+        in: "path"
+        description: "businessId of the business that needs to be found and sent as a response to the request"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Business Found"
+          schema:
+            $ref: "#/definitions/BusinessRegisterRes"
+        404:
+          description: "Business not found"
+    delete:
+      tags:
+      - "businesses"
+      summary: "Delete business by the businessId"
+      operationId: "removeBusiness"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "businessId"
+        in: "path"
+        description: "ID of the business that needs to be deleted"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        204:
+          description: ""
+        404:
+          description: "Business not found"
+    put:
+      tags:
+      - "businesses"
+      summary: "Updates a business based on the business id"
+      description: "This can only be done by the logged in user."
+      operationId: "updateBusiness"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "businessId"
+        in: "path"
+        description: "Business Id of the business that needs to be updated"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "updatedBusiness.businessName has been successfully updated"
+        404:
+          description: "Business Not Found invalid businessid"
+  /businesses/{businessId}/reviews:
+    post:
+      tags:
+      - "reviews"
+      summary: "Add reviews to a business"
+      description: ""
+      operationId: "addReview"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "businessId"
+        in: "path"
+        description: "businessId of the business that needs to be found and sent as a response to the request"
+        required: true
+        type: "string"
+        format: "uuid"
+      - in: "body"
+        name: "body"
+        description: "Business to be registered"
+        required: true
+        schema:
+          $ref: "#/definitions/Reviews"
+      responses:
+        200:
+          description: "Business Found"
+          schema:
+            $ref: "#/definitions/ReviewsRes"
+        404:
+          description: "Business not found"
+    get:
+      tags:
+      - "reviews"
+      summary: "Get all reviews about a business"
+      description: ""
+      operationId: "getAllReviews"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "businessId"
+        in: "path"
+        description: "businessId of the business that needs to be found and sent as a response to the request"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Successfully retrieved reviews for bizFound.businessName"
+          schema:
+            $ref: "#/definitions/ArrayOfReviews"
+        404:
+          description: "Error Business not found"
+
+definitions:
+
+  UserSignup:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      password:
+        type: "string"
+      mobile:
+        type: "string"
+    xml:
+      name: "UserSignup"
+  UserSignin:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+      password:
+        type: "string"
+
+    xml:
+      name: "UserSignin"
+  BusinessRegister:
+    type: "object"
+    properties:
+      businessName:
+        type: "string"
+      telephoneNumber:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      website:
+        type: "string"
+        pattern: "www.[a-zA-Z][5,10].com"
+      industry:
+        type: "string"
+      description:
+        type: "string"
+      street:
+        type: "string"
+      city:
+        type: "string"
+      country:
+        type: "string"
+      state:
+        type: "string"
+      userid:
+        type: "string"
+        format: "uuid"
+    xml:
+      name: "BusinessRegister"
+  BusinessRegisterRes:
+    type: "object"
+    properties:
+      businessId:
+        type: "string"
+        format: "uuid"
+      businessName:
+        type: "string"
+      telephoneNumber:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      website:
+        type: "string"
+        pattern: "www.[a-zA-Z][5,10].com"
+      industry:
+        type: "string"
+      description:
+        type: "string"
+      street:
+        type: "string"
+      city:
+        type: "string"
+      country:
+        type: "string"
+      state:
+        type: "string"
+      userid:
+        type: "string"
+        format: "uuid"
+      dateCreated:
+        type: "string"
+        format: "date"
+      lastEdited:
+        type: "string"
+        format: "date"
+    xml:
+      name: "BusinessRegisterRes"
+  ArrayOfBizRes:
+    type: array
+    items:
+      properties:
+        businessId:
+          type: "string"
+          format: "uuid"
+        businessName:
+          type: "string"
+        telephoneNumber:
+          type: "string"
+        email:
+          type: "string"
+          format: "email"
+        website:
+          type: "string"
+          pattern: "www.[a-zA-Z]{1,10}.com"
+        industry:
+          type: "string"
+        description:
+          type: "string"
+        street:
+          type: "string"
+        city:
+          type: "string"
+        country:
+          type: "string"
+        state:
+          type: "string"
+        userid:
+          type: "string"
+          format: "uuid"
+        dateCreated:
+          type: "string"
+          format: "date"
+        lastEdited:
+          type: "string"
+          format: "date"
+  Reviews:
+    type: "object"
+    properties:
+      userid:
+        type: string
+        format: uuid
+      rating:
+        type: number
+        format: float
+        minimum: 0
+        exclusiveMinimum: true
+        maximum: 5
+      description:
+        type: "string"
+
+  ReviewsRes:
+    type: "object"
+    properties:
+      userid:
+        type: string
+        format: "uuid"
+      rating:
+        type: number
+        format: "float"
+        minimum: 0
+        exclusiveMinimum: true
+        maximum: 5
+      description:
+        type: string
+      dateCreated:
+        type: string
+        format: date
+      reviewId:
+        type: string
+        format: uuid
+      firstName:
+        type: string
+      lastName:
+        type: string
+
+  ArrayOfReviews:
+    type: array
+    items:
+      properties:
+        userid:
+          type: string
+          format: "uuid"
+        rating:
+          type: number
+          format: "float"
+          minimum: 0
+          exclusiveMinimum: true
+          maximum: 5
+        description:
+          type: string
+        dateCreated:
+          type: string
+          format: date
+        reviewId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+externalDocs:
+  description: "API Docs written by Swagger"
+  url: "http://swagger.io"

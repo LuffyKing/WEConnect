@@ -1,7 +1,11 @@
+import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
+import YAML from 'yamljs';
 import express from 'express';
 import bodyParser from 'body-parser';
 import router from './router/index';
 import badApiRequest from './router/badRequests/badApiRequests';
+
 
 /**
  * It initializes an express instance
@@ -12,6 +16,12 @@ const app = express();
  * by the environment variable
  */
 const port = process.env.PORT || 8081;
+/**
+ * It setups the API documenation using Swagger
+ */
+const swaggerDocument = YAML.load(`${process.cwd()}/swagger.yaml`);
+app.use(cors({ credentials: true, origin: true }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 /**
  * It setups the server to parse json data it receives
  */
