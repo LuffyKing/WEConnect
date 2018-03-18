@@ -19,7 +19,7 @@ const port = process.env.PORT || 8081;
 /**
  * It setups the API documenation using Swagger
  */
-const swaggerDocument = YAML.load(`${process.cwd()}/swagger.yaml`);
+const swaggerDocument = YAML.load(`${process.cwd()}/server/swagger.yaml`);
 app.use(cors({ credentials: true, origin: true }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 /**
