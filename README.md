@@ -9,7 +9,7 @@ employees and likewise job-seekers along with prospective employees will know wh
 ### Prerequisites
 ```
 node v8.6.0+
-yarn v1.3.2+
+npm v5.7.1+
 ```
 
 
@@ -34,7 +34,7 @@ yarn buildProd
 ## Running the tests
 
 ```
-yarn test
+npm run test
 ```
 
 ## Deployment
@@ -46,7 +46,7 @@ Deplying to heroku https://devcenter.heroku.com/articles/getting-started-with-no
 * [React](https://reactjs.org/) - The web framework used
 * [Postgresql](https://www.postgresql.org/) - The database used
 * [Bootstrap 4](https://getbootstrap.com/) - The front-end component library used
-* [Yarn](https://yarnpkg.com/en/) - dependency management tool used
+* [npm](http://npmjs.com/) - dependency management tool used
 
 ## Authors
 
