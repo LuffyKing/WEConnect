@@ -36,6 +36,9 @@ yarn buildProd
 ```
 npm run test
 ```
+## APIs
+
+APIs are documented at https://weconnect1993.herokuapp.com/api/v1/api-docs/
 
 ## Deployment
 
