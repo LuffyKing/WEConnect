@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Pacifico|Sedgwick+Ave+Display');
 @import url('https://fonts.googleapis.com/css?family=Lobster');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
 
+.ubu{
+  font-family: 'Ubuntu', sans-serif;
+}
 .logo{
   font-family: 'Pacifico', cursive !important;
 }
