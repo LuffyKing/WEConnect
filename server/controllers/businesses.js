@@ -27,7 +27,7 @@ class Businesses {
   * @returns {string} - depending on the truthiness and/or the falsiness of the
   * location and category parameters a different string is returned
   */
-  calculateFilter(location, category) {
+  calculateFilter(location, category) {//optimize
     const hasLocation = !!location;
     const hasCategory = !!category;
     if (hasCategory && hasLocation) {
@@ -48,7 +48,7 @@ class Businesses {
   * the new business or 400 depending on whether completness of the information
   * posted or the uniqness of the email and telephoneNumber
   */
-  registerBusiness(req, res) {
+  registerBusiness(req, res) {//validation Middleware SRP
     const {
       businessName,
       telephoneNumber,
