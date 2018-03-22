@@ -9,19 +9,18 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-  <link rel="stylesheet" href="./css/base.css">
-  <title>Sign In</title>
-  <link rel="stylesheet" href="css/loginSignupBg.css">
-  <link rel="stylesheet" href="css/Palette.css">
-  <link rel="stylesheet" href="css/loginSignup.css">
-  <link rel="stylesheet" href="css/animationDelay.css">
+  <title>Update A Business</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/carouselHomePage.css">
+  <link rel="stylesheet" href="css/hoverEffects.css">
+  <link rel="stylesheet" href="css/colorOverlay.css">
+  <link rel="stylesheet" href="css/animationDelay.css">
+  <link rel="stylesheet" href="css/Palette.css">
+
 </head>
 
-<body>
-  <video autoplay loop muted id="videoBg">
-      <source src="./images/meeting.mp4" type="video/mp4">
-    </video>
+<body class="darkBody">
   <header>
     <nav class="navbar bg-transparent navbar-expand-lg d-none biu delay-0.6s animated navbar-light bg-light">
       <a class="h2 logo db-text" href="homepage.html">WeConnect</a>
@@ -49,42 +48,71 @@
       </div>
     </nav>
   </header>
-  <section id="signin-form" class='container-fluid mb-2 parent'>
-    <div class="row mb-1">
-      <div class="d-none bir delay-1s animated card box-shadow bg-transparent">
-        <form>
-          <div class="form-group">
-            <div class="p-4">
-              <p class="logo text-center db-text display-4">WeConnect</p>
-              <p class='text-center db-text sub-logo h6'>Sign in to connect with businesses and professionals!</p>
-              <div class="form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text default-primary-color"><i class="fa text-white fa-user-circle"></i></span>
-                  </div>
-                  <input type="email" class="form-control" placeholder="Enter your email" />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text default-primary-color">
-                            <i class="fa fa-lock text-white"></i>
-                          </span>
-                  </div>
-                  <input type="password" class="form-control" placeholder="Enter your password" />
-                </div>
-              </div>
-              <button class="btn default-primary-color-btn text-primary-color btn-block" type="submit">Log In</button>
-              <p class='text-center mt-2'><a class="db-text" href="">Forgot password?</a></p>
-              <p class="text-center mt-3">Don't have an account?<a href="signup-page.html" class='db-text'> Sign up</a></p>
+
+
+  <section>
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="background-color: rgb(49, 47, 46);">
+      <ol class="carousel-indicators">
+        <li data-target='#myCarousel' data-slide-to="0" class="active">
+
+        </li>
+        <li data-target='#myCarousel' data-slide-to="1">
+
+        </li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item carousel-image-1 img-fluid active">
+          <div class="container">
+            <div class="carousel-caption d-none d-sm-block text-white mb-5">
+              <h1 class="display-1 animated d-none font-weight-bold delay-1 bil">Space Exploration</h1>
+              <p class="lead d-none animated font-weight-bold delay-1 bir">Connect with the leading space exploration companies</p>
+              <a href="search-page.html" class="btn default-primary-color-btn animated text-white btn-lg biu delay-1s d-none">Search</a>
             </div>
           </div>
-        </form>
+        </div>
+
+        <div class="carousel-item carousel-image-2">
+          <div class="container">
+            <div class="carousel-caption font-weight-bold d-none d-sm-block text-white text-right mb-5 animated fadeInUpBig delay-1s">
+              <h1 class="display-1 font-weight-bold">Automoblie Manufacturing</h1>
+              <p class="lead font-weight-bold">Connect with the leading Car manufacturing companies</p>
+              <a href="search-page.html" class="btn default-primary-color-btn btn-lg text-white">Search</a>
+            </div>
+          </div>
+        </div>
+  </section>
+  <section class="container-fluid mb-5">
+      <div class="row text-center mb-2">
+        <div class="col">
+          <p class="h2 db-text sub-logo">Featured Companies</p>
+        </div>
+      </div>
+      <div class="row align-items-center justify-content-around mb-4">
+          <div class="hvr-bounce-in text-center parent col-md-3 companyLogo">
+            <a href="business-profile.html">
+              <img src="./images/pizzeria.jpg" alt="" class="child img-circle">
+            </a>
+
+          </div>
+          <div class="col-md-3 text-center hvr-bounce-in companyLogo">
+            <a href="business-profile.html">
+              <img src="./images/jeep.jpg" alt="" class="img-circle">
+            </a>
+          </div>
+        <div class="col-md-3 hvr-bounce-in text-center companyLogo">
+          <a href="business-profile.html">
+            <img src="./images/chevrolet.jpg" alt="" class="img-circle">
+          </a>
+        </div>
+      <div class="text-center col-md-3 hvr-bounce-in companyLogo">
+        <a href="business-profile.html">
+          <img src="./images/tesla.jpg" alt="" class="img-circle">
+        </a>
       </div>
     </div>
   </section>
-  <footer class="container bg-transparent fixed-bottom db-text">
+  <footer class="container bg-transparent mt-5 db-text">
 
     <div class="row">
       <div class="col">
@@ -105,11 +133,17 @@
       </div>
     </div>
   </footer>
+  <script type="text/javascript" src="js-files/countries.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="js-files/tooltip.js" type="text/javascript"></script>
+  <script src="js-files/tooltip.js" type="text/javascript">
+  </script>
+  <script type="text/javascript" src="js-files/autopick.js">
+  </script>
   <script type="text/javascript" src="js-files/animationsConfig.js">
+  </script>
+
   </script>
 </body>
 
