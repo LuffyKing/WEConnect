@@ -53,7 +53,6 @@ app.use(badApiRequest);
  * Set up the server to listen on the port specified in the port variable and
  * start the server
  */
-app.listen(port, () => {
-});
+app.listen(port);
 
 export default app;
