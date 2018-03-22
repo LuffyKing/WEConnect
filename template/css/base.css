@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster|Pacifico|Sedgwick+Ave+Display');
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+
+.logo{
+  font-family: 'Pacifico', cursive !important;
+}
+.sub-logo{
+  font-family: 'Lobster', cursive !important;
+}
+body,
+html,
+#app{
+    height:100%;
+}
+.body-unauth{
+  background: url('../images/Business-People-Collaborating-Together.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+.body-auth{
+  background: url('../images/208377.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+
+}
+.body-auth2{
+  background: url('../images/dark.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+
+}
+.darkBody{
+  background-color: #FAFBFC;
+}
+
+.grow:hover{
+  -webkit-transform: scale(1.3);
+  -ms-transform: scale(1.3);
+  transform: scale(1.3);
+}
+.growSmaller:hover{
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+.bg-orange{
+  background: rgba(147,206,222,1);
+  background: -moz-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(147,206,222,1)), color-stop(41%, rgba(117,189,209,1)), color-stop(100%, rgba(73,165,191,1)));
+  background: -webkit-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  background: -o-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  background: -ms-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  background: linear-gradient(to right, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93cede', endColorstr='#49a5bf', GradientType=1 );
+}
+.orange-text{
+  color: rgba(147,206,222,1);
+  color: -moz-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  color: -webkit-gradient(left top, right top, color-stop(0%, rgba(147,206,222,1)), color-stop(41%, rgba(117,189,209,1)), color-stop(100%, rgba(73,165,191,1)));
+  color: -webkit-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  color: -o-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  color: -ms-linear-gradient(left, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  color: linear-gradient(to right, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(73,165,191,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93cede', endColorstr='#49a5bf', GradientType=1 );
+}
+.input-group-text{
+color:0 0;
+border: 0;
+
+}
+.box-shadow-lighter{
+  -webkit-box-shadow: 0px -1px 10px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px -1px 10px 0px rgba(0,0,0,0.75);
+box-shadow: 0px -1px 10px 0px rgba(0,0,0,0.75);
+}
+.box-shadow{
+  -webkit-box-shadow: -2px 3px 13px -1px rgba(0,0,0,0.72);
+  -moz-box-shadow: -2px 3px 13px -1px rgba(0,0,0,0.72);
+  box-shadow: -2px 3px 13px -1px rgba(0,0,0,0.72);
+}
+
+.box-shadow-darker{
+  -webkit-box-shadow: 0px -1px 10px 6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px -1px 10px 6px rgba(0,0,0,0.75);
+  box-shadow: 0px -1px 10px 6px rgba(0,0,0,0.75);
+}
+.box-shadow-much-darker{
+  -webkit-box-shadow: 0px -1px 10px 11px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px -1px 10px 11px rgba(0,0,0,0.75);
+box-shadow: 0px -1px 10px 11px rgba(0,0,0,0.75);
+}
+.hr-line-dashed {
+    border-top: 1px dashed #E7EAEC;
+    background-color: #ffffff;
+    height: 1px;
+    margin: 20px 0;
+}
