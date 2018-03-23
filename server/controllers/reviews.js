@@ -43,33 +43,25 @@ class Reviews extends Businesses {
     const isValidUser = !!userSearchResult;
     const isValidBusiness = !!this.findBusinessAllUsers(businessid);
     if (isValidBusiness && isValidUser) {
-      if (
-        rating &&
-        description
-      ) {
-        const newReview = {
-          userid,
-          rating,
-          description,
-          dateCreated: moment(),
-          reviewId: uuidv4(),
-          firstName: userSearchResult.firstName,
-          lastName: userSearchResult.lastName
-        };
-        try {
-          this.reviews[businessid].push(newReview);
-        } catch (err) {
-          this.reviews[businessid] = [];
-          this.reviews[businessid].push(newReview);
-        }
+      const newReview = {
+        userid,
+        rating,
+        description,
+        dateCreated: moment(),
+        reviewId: uuidv4(),
+        firstName: userSearchResult.firstName,
+        lastName: userSearchResult.lastName
+      };
+      try {
         this.reviews[businessid].push(newReview);
-        return res.status(200).send({
-          message: 'Successfully created a new review',
-          newReview
-        });
+      } catch (err) {
+        this.reviews[businessid] = [];
+        this.reviews[businessid].push(newReview);
       }
-      return res.status(400).send({
-        message: 'Error null rating or description'
+      this.reviews[businessid].push(newReview);
+      return res.status(200).send({
+        message: 'Successfully created a new review',
+        newReview
       });
     }
     return res.status(404).send({

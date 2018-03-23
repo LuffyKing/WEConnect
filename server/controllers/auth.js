@@ -45,39 +45,23 @@ class Auth {
       email,
       password
     } = req.body;
-    const hasEmail = !!email;
-    const hasMobile = !!mobile;
-    const hasFirstName = !!firstName;
-    const hasLastName = !!lastName;
-    const hasPassword = !!password;
     if (
       this.hasUniqueEmail(email) &&
       this.hasUniqueMobileNumber(mobile)
     ) {
-      if (
-        hasEmail &&
-        hasMobile &&
-        hasFirstName &&
-        hasLastName &&
-        hasPassword
-      ) {
-        const newUser = {
-          firstName,
-          lastName,
-          mobile,
-          email,
-          password: bcrypt.hashSync(password),
-          userid: uuidv4(),
-          dateCreated: moment()
-        };
-        this.users.push(newUser);
-        return res.status(201).send({
-          message: 'successfully created a new user',
-          user: newUser
-        });
-      }
-      return res.status(400).send({
-        message: 'Error Required Fields can not be empty.'
+      const newUser = {
+        firstName,
+        lastName,
+        mobile,
+        email,
+        password: bcrypt.hashSync(password),
+        userid: uuidv4(),
+        dateCreated: moment()
+      };
+      this.users.push(newUser);
+      return res.status(201).send({
+        message: 'successfully created a new user',
+        user: newUser
       });
     }
     return res.status(400).send({

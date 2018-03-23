@@ -19,27 +19,7 @@ class Businesses {
     this.getAllBusinesses = this.getAllBusinesses.bind(this);
     this.filter = '';
   }
-  /**
-  * It validates the email and password by checking it against the list
-  * of users
-  * @param {string} location - the location query for a group of businesses
-  * @param {string} category - the category query for a group of businesses
-  * @returns {string} - depending on the truthiness and/or the falsiness of the
-  * location and category parameters a different string is returned
-  */
-  calculateFilter(location, category) {//optimize
-    const hasLocation = !!location;
-    const hasCategory = !!category;
-    if (hasCategory && hasLocation) {
-      this.filter = 'Error - Double filter';
-    } else if (hasCategory) {
-      this.filter = 'CATEGORY';
-    } else if (hasLocation) {
-      this.filter = 'LOCATION';
-    } else {
-      this.filter = 'NO FILTER';
-    }
-  }
+
   /**
   * It registers a business based off the information posted
   * @param {Object} req - request object containing params and body
@@ -48,7 +28,7 @@ class Businesses {
   * the new business or 400 depending on whether completness of the information
   * posted or the uniqness of the email and telephoneNumber
   */
-  registerBusiness(req, res) {//validation Middleware SRP
+  registerBusiness(req, res) {
     const {
       businessName,
       telephoneNumber,
@@ -62,58 +42,30 @@ class Businesses {
       state,
       userid
     } = req.body;
-    const hasBusinessName = !!businessName;
-    const hasTelephoneNumber = !!telephoneNumber;
-    const hasEmail = !!email;
-    const hasBusinessWebsite = !!businessWebsite;
-    const hasIndusty = !!industry;
-    const hasDescription = !!description;
-    const hasStreet = !!street;
-    const hasCity = !!city;
-    const hasCountry = !!country;
-    const hasState = !!state;
-    const hasUserid = !!userid;
     if (
       this.hasUniqueEmail(email) &&
       this.hasUniqueEmail(telephoneNumber)
     ) {
-      if (
-        hasBusinessName &&
-        hasTelephoneNumber &&
-        hasBusinessWebsite &&
-        hasEmail &&
-        hasIndusty &&
-        hasStreet &&
-        hasCity &&
-        hasCountry &&
-        hasState &&
-        hasDescription &&
-        hasUserid
-      ) {
-        const newBusiness = {
-          businessName,
-          telephoneNumber,
-          email,
-          businessWebsite,
-          industry,
-          description,
-          street,
-          city,
-          country,
-          state,
-          userid,
-          businessid: uuidv4(),
-          dateCreated: moment(),
-          lastEdited: moment(),
-        };
-        this.businesses.push(newBusiness);
-        return res.status(201).send({
-          message: 'successfully created a new business',
-          business: newBusiness
-        });
-      }
-      return res.status(400).send({
-        message: 'Error All Required fields must be filled'
+      const newBusiness = {
+        businessName,
+        telephoneNumber,
+        email,
+        businessWebsite,
+        industry,
+        description,
+        street,
+        city,
+        country,
+        state,
+        userid,
+        businessid: uuidv4(),
+        dateCreated: moment(),
+        lastEdited: moment(),
+      };
+      this.businesses.push(newBusiness);
+      return res.status(201).send({
+        message: 'successfully created a new business',
+        business: newBusiness
       });
     }
     return res.status(400).send({
@@ -139,8 +91,7 @@ class Businesses {
       street,
       city,
       country,
-      state,
-      userid
+      state
     } = req.body;
     const { businessid } = req.params;
     const bizSearchResult = this.findBusinessAllUsers(businessid);
@@ -148,7 +99,7 @@ class Businesses {
     if (isValidSearchResult) {
       const updatedBusiness = {
         businessid,
-        userid: userid || bizSearchResult.userid,
+        userid: bizSearchResult.userid,
         email: email || bizSearchResult.email,
         businessWebsite: businessWebsite || bizSearchResult.businessWebsite,
         industry: industry || bizSearchResult.industry,
@@ -169,7 +120,7 @@ class Businesses {
       });
     }
     return res.status(404).send({
-      message: 'Business Not Found invalid businessid'
+      message: 'Business Not Found'
     });
   }
   /**
@@ -229,13 +180,11 @@ class Businesses {
       location,
       category
     } = req.query;
+    const {
+      filter
+    } = req.body;
     this.calculateFilter(location, category);
-    switch (this.filter) {
-      case 'Error - Double filter': {
-        return res.status(400).send({
-          message: 'Error - Double filtering, use only one.'
-        });
-      }
+    switch (filter) {
       case 'CATEGORY': {
         const filteredBusinesses = this.businesses.filter(business =>
           business.industry === category);
