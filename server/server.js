@@ -4,7 +4,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import router from './router/index';
 import badApiRequest from './router/badRequests/badApiRequests';
-import welcomeMiddleware from './middlewares/welcomeMiddleware';
 /**
  * It initializes an express instance
  */
@@ -34,7 +33,12 @@ app.use(morgan('dev'));
 /**
  * Middleware for welcome message  on the '/' route
  */
-app.get('/', welcomeMiddleware);
+app.get('/', (req, res) => {
+  res.status(200).send({
+    message: 'Welcome to WeConnect api, go to /api/v1/api-docs/ forcurrent api docs. Current version is v1'
+  });
+});
+
 /**
  * Middleware that allows the server to use the express router that handles
  * auth, business and review, the uses the router along the /api/v1
