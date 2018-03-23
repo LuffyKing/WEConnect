@@ -32,7 +32,7 @@ const newBusinessNotAllFieldsFilled = {
 
 describe('Business API registerBusiness Tests', () => {
   describe('/POST registerBusiness', () => {
-    it('it should POST and register a business', (done) => {
+    it('should POST and register a business', (done) => {
       chai.request(server)
         .post('/api/v1/businesses/')
         .send(newBusiness)
@@ -69,7 +69,7 @@ describe('Business API registerBusiness Tests', () => {
 
   describe('/POST registerBusiness', () => {
     it(
-      'it should try to POST and register a business with not all the fields filled and fail',
+      'should try to POST and register a business with not all the fields filled and fail',
       (done) => {
         chai.request(server)
           .post('/api/v1/businesses/')
@@ -87,7 +87,7 @@ describe('Business API registerBusiness Tests', () => {
 
   describe('/POST registerBusiness', () => {
     it(
-      'it should try to POST and register a business with all',
+      'should try to POST and register a business with all',
       (done) => {
         chai.request(server)
           .post('/api/v1/businesses/')

@@ -8,7 +8,7 @@ chai.should();
 const should = chai.should();
 describe('Business Controller method findBusinessAllUsers Tests', () => {
   describe('found test case findBusinessAllUsers', () => {
-    it('it should find a business with the specified businessid', () => {
+    it('should find a business with the specified businessid', () => {
       const business = businessCont.findBusinessAllUsers(businessid);
       business.should.be.an('object');
       business.businessid.should.eql(businessid);
@@ -17,7 +17,7 @@ describe('Business Controller method findBusinessAllUsers Tests', () => {
 
   describe('not found test case findBusinessAllUsers', () => {
     it(
-      'it should not find a business with a badid',
+      'should not find a business with a badid',
       () => {
         const business = businessCont.findBusinessAllUsers('badid');
         should.not.exist(business);

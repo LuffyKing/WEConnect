@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 const businessid = 1;
 describe('Business API getBusiness Tests', () => {
   describe('/GET getBusiness', () => {
-    it('it should GET a business specified by the businessid', (done) => {
+    it('should GET a business specified by the businessid', (done) => {
       chai.request(server)
         .get(`/api/v1/businesses/${businessid}`)
         .end((err, res) => {
@@ -36,7 +36,7 @@ describe('Business API getBusiness Tests', () => {
 
   describe('/GET getBusiness', () => {
     it(
-      'it should try to make a request to the GET api with an invalid businessid and fail',
+      'should try to make a request to the GET api with an invalid businessid and fail',
       (done) => {
         chai.request(server)
           .get('/api/v1/businesses/badid')

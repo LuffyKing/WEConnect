@@ -8,7 +8,7 @@ const nonUniqueMobile = businesses[0].telephoneNumber;
 chai.should();
 describe('Business Controller method hasUniqueTelephoneNumber Tests', () => {
   describe('unique test case hasUniqueTelephoneNumber', () => {
-    it('it should find that the telephone number is unique', () => {
+    it('should find that the telephone number is unique', () => {
       const hasTelephoneNumber = businessCont.hasUniqueTelephoneNumber(uniqueMobile);
       hasTelephoneNumber.should.be.a('boolean');
       hasTelephoneNumber.should.eql(true);
@@ -17,7 +17,7 @@ describe('Business Controller method hasUniqueTelephoneNumber Tests', () => {
 
   describe('non unique test case hasUniqueTelephoneNumber', () => {
     it(
-      'it should not find that the telephone number is unique',
+      'should not find that the telephone number is unique',
       () => {
         const hasTelephoneNumber = businessCont.hasUniqueTelephoneNumber(nonUniqueMobile);
         hasTelephoneNumber.should.be.a('boolean');

@@ -25,7 +25,7 @@ describe('Auth API Login Tests', () => {
    * Testing post request on the login api -success case
    */
   describe('/POST login', () => {
-    it('it should POST login credentials and succeed', (done) => {
+    it('should POST login credentials and succeed', (done) => {
       chai.request(server)
         .post('/api/v1/auth/login')
         .send(login)
@@ -42,7 +42,7 @@ describe('Auth API Login Tests', () => {
    * Testing post request on the login api - failure case
    */
   describe('/POST login', () => {
-    it('it should POST invalid login credentials', (done) => {
+    it('should POST invalid login credentials', (done) => {
       chai.request(server)
         .post('/api/v1/auth/login')
         .send(badLogin)

@@ -23,7 +23,7 @@ const reviewNoRating = {
 const businessid = 3;
 describe('Reviews API addReview Tests', () => {
   describe('/POST addReview', () => {
-    it('it should add a review to a business', (done) => {
+    it('should add a review to a business', (done) => {
       chai.request(server)
         .post(`/api/v1/businesses/${businessid}/reviews`)
         .send(review)
@@ -60,7 +60,7 @@ describe('Reviews API addReview Tests', () => {
   });
 
   describe('/POST addReview', () => {
-    it('it should try to add a review with no rating to a business and fail', (done) => {
+    it('should try to add a review with no rating to a business and fail', (done) => {
       chai.request(server)
         .post(`/api/v1/businesses/${businessid}/reviews`)
         .send(reviewNoRating)
@@ -75,7 +75,7 @@ describe('Reviews API addReview Tests', () => {
   });
 
   describe('/POST addReview', () => {
-    it('it should try to add a review with no description to a business and fail', (done) => {
+    it('should try to add a review with no description to a business and fail', (done) => {
       chai.request(server)
         .post(`/api/v1/businesses/${businessid}/reviews`)
         .send(reviewNoDescription)

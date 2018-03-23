@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 const businessid = 1;
 describe('Business API removeBusiness Tests', () => {
   describe('/DELETE removeBusiness', () => {
-    it('it should DELETE a business specified by the businessid', (done) => {
+    it('should DELETE a business specified by the businessid', (done) => {
       chai.request(server)
         .delete(`/api/v1/businesses/${businessid}`)
         .end((err, res) => {
@@ -19,7 +19,7 @@ describe('Business API removeBusiness Tests', () => {
 
   describe('/DELETE removeBusiness', () => {
     it(
-      'it should try to DELETE a business with an invalid businessid and fail',
+      'should try to DELETE a business with an invalid businessid and fail',
       (done) => {
         chai.request(server)
           .delete('/api/v1/businesses/badid')

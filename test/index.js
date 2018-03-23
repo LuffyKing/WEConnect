@@ -1,7 +1,5 @@
 import './auth/auth-login';
 import './auth/auth-signup';
-import './auth/router';
-import './businesses/calculateFilter';
 import './businesses/findBusiness';
 import './businesses/findBusinessAllUsers';
 import './businesses/findBusinessArrPosition';
@@ -11,10 +9,7 @@ import './businesses/hasUniqueEmail';
 import './businesses/hasUniqueTelephoneNumber';
 import './businesses/registerBusiness';
 import './businesses/removeBusiness';
-import './businesses/router';
 import './businesses/updateBusinesses';
 import './reviews/addReview';
 import './reviews/getAllReviews';
-import './reviews/router';
 import './badRequests/badApiRequest';
-import './middlewares/welcomeMessage';

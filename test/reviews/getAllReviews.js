@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 const businessid = 3;
 describe('Reviews API getAllReviews Tests', () => {
   describe('/GET getAllReviews', () => {
-    it('it should get all reviews about a business', (done) => {
+    it('should get all reviews about a business', (done) => {
       chai.request(server)
         .get(`/api/v1/businesses/${businessid}/reviews`)
         .end((err, res) => {
@@ -23,7 +23,7 @@ describe('Reviews API getAllReviews Tests', () => {
   });
 
   describe('/GET getAllReviews', () => {
-    it('it should try to get all reviews from a business with an invalid businessid and fail', (done) => {
+    it('should try to get all reviews from a business with an invalid businessid and fail', (done) => {
       chai.request(server)
         .get('/api/v1/businesses/badid/reviews')
         .end((err, res) => {

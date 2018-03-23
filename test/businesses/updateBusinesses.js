@@ -11,7 +11,7 @@ const businessid = 3;
 chai.use(chaiHttp);
 describe('Business API updateBusiness Tests', () => {
   describe('/PUT updateBusiness', () => {
-    it('it should POST and register a business', (done) => {
+    it('should POST and register a business', (done) => {
       chai.request(server)
         .put(`/api/v1/businesses/${businessid}`)
         .send(updatesToBusiness)
@@ -30,7 +30,7 @@ describe('Business API updateBusiness Tests', () => {
 
   describe('/PUT updateBusiness', () => {
     it(
-      'it should try to PUT to an invalid businessid',
+      'should try to PUT to an invalid businessid',
       (done) => {
         chai.request(server)
           .put('/api/v1/businesses/badid')

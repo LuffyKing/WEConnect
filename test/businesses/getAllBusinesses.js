@@ -9,7 +9,7 @@ const categoryTerm = 'construction';
 chai.use(chaiHttp);
 describe('Business API getAllBusinesses Tests', () => {
   describe('/GET getAllBusiness', () => {
-    it('it should GET all businesses with no filters applied', (done) => {
+    it('should GET all businesses with no filters applied', (done) => {
       chai.request(server)
         .get('/api/v1/businesses/')
         .end((err, res) => {
@@ -27,7 +27,7 @@ describe('Business API getAllBusinesses Tests', () => {
 
   describe('/GET getAllBusinesses', () => {
     it(
-      'it should GET all businesses with the specified LOCATION in the request',
+      'should GET all businesses with the specified LOCATION in the request',
       (done) => {
         chai.request(server)
           .get(`/api/v1/businesses?location=${locationTerm}`)
@@ -52,7 +52,7 @@ describe('Business API getAllBusinesses Tests', () => {
 
   describe('/GET getAllBusinesses', () => {
     it(
-      'it should GET all businesses with the specified CATEGORY in the request',
+      'should GET all businesses with the specified CATEGORY in the request',
       (done) => {
         chai.request(server)
           .get(`/api/v1/businesses?category=${categoryTerm}`)

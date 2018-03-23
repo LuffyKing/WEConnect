@@ -29,7 +29,7 @@ const incompleteSignup = {
 
 describe('Auth API Signup Tests', () => {
   describe('/POST signup', () => {
-    it('it should POST signup information to create a new user', (done) => {
+    it('should POST signup information to create a new user', (done) => {
       chai.request(server)
         .post('/api/v1/auth/signup')
         .send(signup)
@@ -49,7 +49,7 @@ describe('Auth API Signup Tests', () => {
     });
   });
   describe('/POST signup', () => {
-    it('it should POST incomplete signup information and fail', (done) => {
+    it('should POST incomplete signup information and fail', (done) => {
       chai.request(server)
         .post('/api/v1/auth/signup')
         .send(incompleteSignup)
@@ -64,7 +64,7 @@ describe('Auth API Signup Tests', () => {
   });
   describe('/POST signup', () => {
     it(
-      'it should POST signup information with non-unique Email or Mobile',
+      'should POST signup information with non-unique Email or Mobile',
       (done) => {
         chai.request(server)
           .post('/api/v1/auth/signup')
