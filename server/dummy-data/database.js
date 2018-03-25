@@ -1,15 +1,18 @@
 import moment from 'moment';
 import bcrypt from 'bcrypt-nodejs';
+import uuidv4 from 'uuid/v4';
 
 const testpass = bcrypt.hashSync('damola');
-
+const a = uuidv4();
+const b = uuidv4();
+const c = uuidv4();
 const users = [
   {
     firstName: 'Oyindamola',
     lastName: 'Aderinwale',
     mobile: '08182924611',
     email: 'aderinwale17@gmail.com',
-    userid: 1,
+    userid: uuidv4(),
     password: testpass,
     dateCreated: moment()
   },
@@ -18,7 +21,7 @@ const users = [
     lastName: 'Aderinwale',
     mobile: '08181117777',
     email: 'aderinwale@gmail.com',
-    userid: 2,
+    userid: uuidv4(),
     password: testpass,
     dateCreated: moment()
   },
@@ -27,7 +30,7 @@ const users = [
     lastName: 'Kinger',
     mobile: '08182924615',
     email: 'ade@gmail.com',
-    userid: 3,
+    userid: uuidv4(),
     password: testpass,
     dateCreated: moment()
   }
@@ -45,8 +48,8 @@ const businesses = [
     city: 'San Francisco',
     country: 'United States',
     state: 'California',
-    userid: 1,
-    businessid: 1,
+    userid: a,
+    businessid: uuidv4(),
     dateCreated: moment(),
     lastEdited: moment(),
   },
@@ -61,8 +64,8 @@ const businesses = [
     city: 'San Francisco',
     country: 'United States',
     state: 'California',
-    userid: 2,
-    businessid: 2,
+    userid: b,
+    businessid: uuidv4(),
     dateCreated: moment(),
     lastEdited: moment(),
   },
@@ -77,8 +80,8 @@ const businesses = [
     city: 'San Diego',
     country: 'United States',
     state: 'California',
-    userid: 3,
-    businessid: 3,
+    userid: c,
+    businessid: uuidv4(),
     dateCreated: moment(),
     lastEdited: moment(),
   }
