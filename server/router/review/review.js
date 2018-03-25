@@ -14,7 +14,7 @@ const reviewsCont = new ReviewsController(businesses, reviews, users);
 /**
  *It creates a post route on / to work with the addReview method
  */
-reviewRouter.post('/', validation.getAllBusinessesValidator, reviewsCont.addReview);
+reviewRouter.post('/', validation.addReviewValidator, reviewsCont.addReview);
 /**
  *It creates a get route on / to work with the addReview method
  */
