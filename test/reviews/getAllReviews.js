@@ -1,10 +1,13 @@
+import uuidv4 from 'uuid/v4';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server/server';
+import { businesses } from '../../server/dummy-data/database';
+
 
 chai.use(chaiHttp);
 
-const businessid = 3;
+const { businessid } = businesses[2];
 describe('Reviews API getAllReviews Tests', () => {
   describe('/GET getAllReviews', () => {
     it('should get all reviews about a business', (done) => {
@@ -23,14 +26,26 @@ describe('Reviews API getAllReviews Tests', () => {
   });
 
   describe('/GET getAllReviews', () => {
-    it('should try to get all reviews from a business with an invalid businessid and fail', (done) => {
+    it('should try to get all reviews from a business with an invalid businessid(nonUUID) and fail', (done) => {
       chai.request(server)
         .get('/api/v1/businesses/badid/reviews')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+  });
+
+  describe('/GET getAllReviews', () => {
+    it('should try to get all reviews from a business with an invalid businessid(uuid) and fail', (done) => {
+      chai.request(server)
+        .get(`/api/v1/businesses/${uuidv4()}/reviews`)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.an('object');
           res.body.should.have.property('message');
-          res.body.message.should.eql('Error Business not found');
           done();
         });
     });
