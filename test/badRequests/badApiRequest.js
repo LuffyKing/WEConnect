@@ -1,11 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import badApiRequest from '../../server/router/badRequests/badApiRequests';
-import testserver from '../../server/test-server';
-import router from '../../server/router';
+import server from '../../server/server';
 
-testserver.use('/api/v1', router);
-testserver.use(badApiRequest);
 chai.should();
 chai.use(chaiHttp);
 const login = {
@@ -15,7 +11,7 @@ const login = {
 describe('badApiRequest Tests', () => {
   describe('/POST login (badApiRequests control group)', () => {
     it('should POST login credentials and succeed(control group test)', (done) => {
-      chai.request(testserver)
+      chai.request(server)
         .post('/api/v1/auth/login')
         .send(login)
         .end((err, res) => {
@@ -29,7 +25,7 @@ describe('badApiRequest Tests', () => {
   });
   describe('/POST badApiRequest', () => {
     it('try to POST to a bad route, it should fail and get an error message', (done) => {
-      chai.request(testserver)
+      chai.request(server)
         .post('/api/carzyrequest')
         .send(login)
         .end((err, res) => {
@@ -43,7 +39,7 @@ describe('badApiRequest Tests', () => {
   });
   describe('/GET badApiRequest', () => {
     it('try to GET from a bad route, it should fail and get an error message', (done) => {
-      chai.request(testserver)
+      chai.request(server)
         .post('/api/carzyrequest')
         .send(login)
         .end((err, res) => {
@@ -57,7 +53,7 @@ describe('badApiRequest Tests', () => {
   });
   describe('/PUT badApiRequest', () => {
     it('try to PUT to a bad route, it should fail and get an error message', (done) => {
-      chai.request(testserver)
+      chai.request(server)
         .post('/api/carzyrequest')
         .send(login)
         .end((err, res) => {
@@ -71,7 +67,7 @@ describe('badApiRequest Tests', () => {
   });
   describe('/DELETE badApiRequest', () => {
     it('it try to DELETE a resource on a bad route, it should fail and get an error message', (done) => {
-      chai.request(testserver)
+      chai.request(server)
         .post('/api/carzyrequest')
         .send(login)
         .end((err, res) => {
