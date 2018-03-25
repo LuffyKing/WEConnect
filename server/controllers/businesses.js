@@ -17,7 +17,6 @@ class Businesses {
     this.removeBusiness = this.removeBusiness.bind(this);
     this.getBusiness = this.getBusiness.bind(this);
     this.getAllBusinesses = this.getAllBusinesses.bind(this);
-    this.filter = '';
   }
 
   /**
@@ -183,8 +182,17 @@ class Businesses {
     const {
       filter
     } = req.body;
-    this.calculateFilter(location, category);
     switch (filter) {
+      case 'BOTH': {
+        const filteredBusinesses = this.businesses.filter(business =>
+          business.industry === category
+          && `${business.street} ${business.city} ${business.state}
+          ${business.country}`.toUpperCase().includes(location.toUpperCase()));
+        return res.status(200).send({
+          message: 'Success - showing businesses filtered by Category and Location',
+          filteredBusinesses
+        });
+      }
       case 'CATEGORY': {
         const filteredBusinesses = this.businesses.filter(business =>
           business.industry === category);
