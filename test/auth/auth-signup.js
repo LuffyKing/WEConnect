@@ -20,13 +20,37 @@ const signUpDuplicateMobileAndEmail = {
   password: 'damola'
 };
 
-const incompleteSignup = {
-  firstName: 'Damola',
+
+const incompleteLastNameSignup = {
+  firstName: 'Oyindamola',
   email: 'aderinwale09090@gmail.com',
   password: 'Damolaisno1!',
   mobile: '09098980001',
 };
-
+const incompleteFirstNameSignup = {
+  lastName: 'Kinger',
+  email: 'aderinwale09090@gmail.com',
+  password: 'Damolaisno1!',
+  mobile: '09098980001'
+};
+const incompleteEmailSignup = {
+  firstName: 'Oyindamola',
+  lastName: 'Kinger',
+  password: 'Damolaisno1!',
+  mobile: '09098980001'
+};
+const incompletePasswordSignup = {
+  firstName: 'Oyindamola',
+  lastName: 'Kinger',
+  email: 'aderinwale09090@gmail.com',
+  mobile: '09098980001'
+};
+const incompleteMobileSignup = {
+  firstName: 'Oyindamola',
+  lastName: 'Kinger',
+  password: 'Damolaisno1!',
+  email: 'aderinwale09090@gmail.com',
+};
 describe('Auth API Signup Tests', () => {
   describe('/POST signup', () => {
     it('should POST signup information to create a new user', (done) => {
@@ -37,27 +61,73 @@ describe('Auth API Signup Tests', () => {
           res.should.have.status(201);
           res.should.be.an('object');
           res.body.should.have.property('message');
-          res.body.message.should.eql('successfully created a new user');
           res.body.should.have.property('user');
           res.body.user.should.be.an('object');
-          res.body.user.firstName.should.eql(signup.firstName);
-          res.body.user.lastName.should.eql(signup.lastName);
-          res.body.user.mobile.should.eql(signup.mobile);
-          res.body.user.email.should.eql(signup.email);
           done();
         });
     });
   });
   describe('/POST signup', () => {
-    it('should POST incomplete signup information and fail', (done) => {
+    it('should POST signup information without last name and fail', (done) => {
       chai.request(server)
         .post('/api/v1/auth/signup')
-        .send(incompleteSignup)
+        .send(incompleteLastNameSignup)
         .end((err, res) => {
           res.should.have.status(400);
           res.should.be.an('object');
           res.body.should.have.property('message');
-          res.body.message.should.eql('Error Required Fields can not be empty.');
+          done();
+        });
+    });
+  });
+  describe('/POST signup', () => {
+    it('should POST signup information without first name and fail', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/signup')
+        .send(incompleteFirstNameSignup)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.an('object');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+  });
+  describe('/POST signup', () => {
+    it('should POST signup information without email and fail', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/signup')
+        .send(incompleteEmailSignup)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.an('object');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+  });
+  describe('/POST signup', () => {
+    it('should POST signup information without password and fail', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/signup')
+        .send(incompletePasswordSignup)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.an('object');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+  });
+  describe('/POST signup', () => {
+    it('should POST signup information without mobile number and fail', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/signup')
+        .send(incompleteMobileSignup)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.should.be.an('object');
+          res.body.should.have.property('message');
           done();
         });
     });
@@ -73,7 +143,6 @@ describe('Auth API Signup Tests', () => {
             res.should.have.status(400);
             res.should.be.an('object');
             res.body.should.have.property('message');
-            res.body.message.should.eql('Error Non-Unique Email Or Mobile.');
             done();
           });
       }
