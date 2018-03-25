@@ -25,9 +25,9 @@ businessRouter.delete('/:businessid', validation.businessidValidator, business.r
 /**
  *It creates a get route on /:businessid to work with the getBusiness method
  */
-businessRouter.get('/:businessid', validation.getAllBusinessesValidator, business.getBusiness);
+businessRouter.get('/:businessid', validation.businessidValidator, business.getBusiness);
 /**
  *It creates a get route on / to work with the getAllBusinesses method
  */
-businessRouter.get('/', business.getAllBusinesses);
+businessRouter.get('/', validation.getAllBusinessesValidator, business.getAllBusinesses);
 export default businessRouter;
