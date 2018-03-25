@@ -45,6 +45,7 @@ class Auth {
       email,
       password
     } = req.body;
+
     if (
       this.hasUniqueEmail(email) &&
       this.hasUniqueMobileNumber(mobile)
