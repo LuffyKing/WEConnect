@@ -3,12 +3,11 @@ import { businesses } from '../../server/dummy-data/database';
 import BusinessController from '../../server/controllers/businesses';
 
 const businessCont = new BusinessController(businesses);
-const businessid = 1;
-const userid = 1;
+const { businessid, userid } = businesses[0];
 chai.should();
 const should = chai.should();
-describe('Business Controller method findBusinessAllUsers Tests', () => {
-  describe('found test case findBusinessAllUsers', () => {
+describe('Business Controller method findBusiness Tests', () => {
+  describe('found test case findBusiness', () => {
     it('should find a business with the specified businessid', () => {
       const business = businessCont.findBusiness(businessid, userid);
       business.should.be.an('object');
@@ -16,7 +15,7 @@ describe('Business Controller method findBusinessAllUsers Tests', () => {
     });
   });
 
-  describe('not found test case findBusinessAllUsers', () => {
+  describe('not found test case findBusiness', () => {
     it(
       'should not find a business with a bad userid ',
       () => {
@@ -26,7 +25,7 @@ describe('Business Controller method findBusinessAllUsers Tests', () => {
     );
   });
 
-  describe('not found test case findBusinessAllUsers', () => {
+  describe('not found test case findBusiness', () => {
     it(
       'it should not find a business with a bad businessid ',
       () => {

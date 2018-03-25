@@ -3,7 +3,7 @@ import { businesses } from '../../server/dummy-data/database';
 import BusinessController from '../../server/controllers/businesses';
 
 const businessCont = new BusinessController(businesses);
-const businessid = 1;
+const { businessid } = businesses[0];
 chai.should();
 const should = chai.should();
 describe('Business Controller method findBusinessAllUsers Tests', () => {
