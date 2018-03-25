@@ -12,29 +12,63 @@ const businessFormInputChecker = ({
   country,
   state,
   userid
-}) => !validator.isEmpty(businessName) &&
-    !validator.isEmpty(telephoneNumber) &&
-    validator.isEmail(email) &&
-    !validator.isEmpty(industry) &&
-    !validator.isEmpty(street) &&
-    !validator.isEmpty(city) &&
-    !validator.isEmpty(country) &&
-    !validator.isEmpty(state) &&
-    !validator.isEmpty(description) &&
-    !validator.isEmpty(businessWebsite) &&
-    !validator.isEmpty(userid);
+}) => !validator.isEmpty(businessName.trim()) &&
+    !validator.isEmpty(telephoneNumber.trim()) &&
+    validator.isEmail(email.trim()) &&
+    !validator.isEmpty(industry.trim()) &&
+    !validator.isEmpty(street.trim()) &&
+    !validator.isEmpty(city.trim()) &&
+    !validator.isEmpty(country.trim()) &&
+    !validator.isEmpty(state.trim()) &&
+    !validator.isEmpty(description.trim()) &&
+    validator.isURL(businessWebsite.trim()) &&
+    validator.isUUID(userid.trim());
+const specialValidation = {
+  email: validator.isEmail,
+  userid: validator.isUUID,
+  businessWebsite: validator.isURL,
+  businessid: validator.isUUID,
+  rating: validator.isInt,
+  ratingOption: { min: 0, max: 5 }
+};
 
+const checkUUID = uuid => validator.isUUID(uuid.trim());
+
+const invalidFieldsChecker = reqBody => Object.keys(reqBody).filter((elm) => {
+  if (`${elm}` in specialValidation) {
+    if (`${elm}Option` in specialValidation) {
+      return !specialValidation[elm](String(reqBody[elm]).trim(), specialValidation[`${elm}Option`]);
+    }
+
+    return !specialValidation[elm](reqBody[elm].trim());
+  }
+  return validator.isEmpty(reqBody[elm].trim());
+});
+
+const emptyFieldsFinder = (reqBody) => {
+  const arrayOfFields = Object.keys(reqBody);
+  const emptyFieldsArr = arrayOfFields.filter(element => !reqBody[element])
+    .map(element => element.replace(/([A-Z])/g, ' $1').toUpperCase());
+  return emptyFieldsArr;
+};
 
 const loginValidator = (req, res, next) => {
   const { email, password } = req.body;
   const noEmail = !email;
   const noPassword = !password;
   if (noEmail && noPassword) {
-    return res.status(401).send({ message: 'Email or Password Field is empty' });
-  } else if (validator.isEmail(email)) {
+    return res.status(400).send({ message: 'Email and Password Fields are empty' });
+  } else if (noEmail) {
+    return res.status(400).send({ message: 'Email field is empty' });
+  } else if (noPassword) {
+    return res.status(400).send({ message: 'Password is empty' });
+  } else if (validator.isEmpty(password.trim())) {
+    return res.status(400).send({ message: 'Password input is invalid' });
+  } else if (!validator.isEmail(email.trim())) {
+    return res.status(400).send({ message: 'Email provided is not an email' });
+  }
+  if (!noPassword && !noEmail) {
     next();
-  } else {
-    return res.status(401).send({ message: 'Email must be valid' });
   }
 };
 
@@ -57,20 +91,20 @@ const signUpValidator = (req, res, next) => {
     });
   }
   if (!firstName) {
-    return res.status(400).send('Error First Name is not provided');
+    return res.status(400).send({ message: 'Error First Name is not provided' });
   }
   if (!mobile) {
-    return res.status(400).send('Error mobile is not provided');
+    return res.status(400).send({ message: 'Error mobile is not provided' });
   }
   if (!password) {
-    return res.status(400).send('Error password is not provided');
+    return res.status(400).send({ message: 'Error password is not provided' });
   }
   if (
-    validator.isEmail(email.trim() || '') &&
-    validator.isMobilePhone(mobile.trim() || '', 'any') &&
-    !validator.isEmpty(firstName.trim() || '') &&
-    !validator.isEmpty(lastName.trim() || '') &&
-    !validator.isEmpty(password.trim() || '')
+    validator.isEmail(email.trim()) &&
+    validator.isMobilePhone(mobile.trim(), 'any') &&
+    !validator.isEmpty(firstName.trim()) &&
+    !validator.isEmpty(lastName.trim()) &&
+    !validator.isEmpty(password.trim())
   ) {
     next();
   } else {
@@ -81,78 +115,154 @@ const signUpValidator = (req, res, next) => {
 };
 
 const registerBusinessValidator = (req, res, next) => {
-  if (
-    businessFormInputChecker(...req.body)
+  const {
+    businessName,
+    telephoneNumber,
+    email,
+    businessWebsite,
+    industry,
+    description,
+    street,
+    city,
+    country,
+    state,
+    userid
+  } = req.body;
+  const reqBody = {
+    businessName,
+    telephoneNumber,
+    email,
+    businessWebsite,
+    industry,
+    description,
+    street,
+    city,
+    country,
+    state,
+    userid
+  };
+  const emptyFieldsArr = emptyFieldsFinder(reqBody);
+  if (emptyFieldsArr.length > 0) {
+    const fields = emptyFieldsArr.join(', ');
+    return res.status(400).send({
+      message: `Error ${fields} is/are not provided`
+    });
+  } else if (
+    businessFormInputChecker(reqBody)
   ) {
     next();
   } else {
-    return validator.isEmail(res.body.email) ?
-      res.status(400).send({
-        message: 'Error Invalid Company Email'
-      })
-      : res.status(400).send({
-        message: 'Error All Required fields must be filled'
-      });
+    const invalidFields = invalidFieldsChecker(reqBody);
+    return res.status(400).send({
+      message: `Error Required Fields ${invalidFields.join(', ')} Values are Invalid`
+    });
   }
 };
+
+
+const filledFieldChecker = (reqBody) => {
+  const filledFieldsArr = Object.keys(reqBody).filter(element => !!reqBody[element])
+    .map(element => element.replace(/([A-Z])/g, ' $1').toUpperCase());
+  return filledFieldsArr;
+};
+
+const invalidFieldsCheckerUpdate = filledFieldsArr => filledFieldsArr.filter((elm) => {
+  if (`${elm}` in specialValidation) {
+    return specialValidation[elm](elm.trim());
+  }
+  return validator.isEmpty(elm.trim());
+});
 
 const updateBusinessValidator = (req, res, next) => {
   const { businessid } = req.params;
-  if (validator.isUUID(businessid)) {
-    if (validator.isEmpty(req.email)) {
-      if (req.params.values.some(element => !!element)) {
-        next();
-      }
-      return res.status(204).send();
-    } else if (validator.isEmail(req.params.email)) {
+  if (!checkUUID(businessid)) {
+    return res.status(400).send({
+      message: 'Supplied Business Id  is not a UUID'
+    });
+  }
+  const filledFieldsArr = filledFieldChecker(req.body);
+  if (filledFieldsArr.length < 1) {
+    return res.status(200).send({
+      message: 'No changes were made'
+    });
+  }
+  if (filledFieldsArr.length > 0) {
+    const invalidFieldsArr = invalidFieldsCheckerUpdate(filledFieldsArr);
+    if (invalidFieldsArr.length > 0) {
+      return res.status(400).send({
+        message: `The field(s) ${invalidFieldsArr.join(', ')} is/are invalid`
+      });
+    }
+    if (invalidFieldsArr.length < 1) {
       next();
     }
-    return res.status(400).send({ message: 'Invalid Email' });
   }
-  return res.status(400).send({
-    message: 'Invalid Business Id'
-  });
 };
-
 
 const businessidValidator = (req, res, next) => {
   const { businessid } = req.params;
+  if (!businessid) {
+    return res.status(400).send({
+      message: 'BusinessId not provided'
+    });
+  }
   if (validator.isUUID(businessid)) {
     next();
   }
-  return res.status(400).send({
-    message: 'Invalid Business Id'
-  });
+  if (!validator.isUUID(businessid)) {
+    return res.status(400).send({
+      message: 'Business Id provided is not a UUID'
+    });
+  }
 };
 
 const getAllBusinessesValidator = (req, res, next) => {
-  const compValueBothEmpty = validator.isEmpty(req.body.location) &&
-  validator.isEmpty(req.body.category);
-  const compValueBothFull = !validator.isEmpty(req.body.location) &&
-  !validator.isEmpty(req.body.category);
-
-
-  if (compValueBothEmpty) {
+  const filterObj = [{ query: req.query.location, filter: 'LOCATION' },
+    { query: req.query.category, filter: 'CATEGORY' }];
+  const filterActionArray = filterObj.filter(elm => !!elm.query).filter(elm =>
+    !validator.isEmpty(elm.query.trim()));
+  if (filterActionArray < 1) {
     req.body.filter = '';
     next();
-  } else if (compValueBothFull) {
-    return res.status(400).send({
-      message: 'Error - Double filtering, use only one.'
-    });
+  } else if (filterActionArray > 1) {
+    req.body.filter = 'BOTH';
+    next();
+  } else {
+    req.body.filter = filterActionArray[0].filter;
+    next();
   }
-  req.filter = !validator.isEmpty(req.body.location) ? 'LOCATION' : 'CATEGORY';
-  next();
 };
 const addReviewValidator = (req, res, next) => {
-  if (
-    validator.isFloat(req.body.rating) &&
-    !validator.isEmpty(req.description)
+  let userid, rating, description;
+  let reqBody = req.body;
+  reqBody = {
+    userid,
+    rating,
+    description,
+    ...reqBody
+  };
+  const emptyFields = emptyFieldsFinder(reqBody);
+  const invalidFields = invalidFieldsChecker(req.body);
+  if (!checkUUID(req.params.businessid)) {
+    return res.status(400).send({
+      message: 'Supplied Business Id  is not a UUID'
+    });
+  } else if (invalidFields.length > 0) {
+    return res.status(400).send({
+      message: `Error the following field(s) ${invalidFields.join(' ,')} are/is invalid `
+    });
+  } else if (emptyFields.length > 0) {
+    return res.status(400).send({
+      message: `Error ${emptyFields.join(' ,')} is/are not provided`
+    });
+  } else if (
+    validator.isInt(String(req.body.rating).trim(), { min: 0, max: 5 }) &&
+    !validator.isEmpty(req.body.description.trim()) &&
+    validator.isUUID(req.body.userid.trim()) &&
+    validator.isUUID(req.params.businessid.trim())
   ) {
     next();
   }
-  return res.status(400).send({
-    message: 'Error null rating or description'
-  });
 };
 
 
