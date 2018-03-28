@@ -7,12 +7,10 @@
     "test": "nyc --reporter=html --reporter=text ./node_modules/.bin/mocha --exit --require babel-core/register test/index.js",
     "start": "babel-node server/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "migrate": "sequelize db:migrate",
-    "postinstall":"npm run build",
+    "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate",
+    "postinstall": "npm run build",
     "build": "babel server -d server/server",
-    "heroku-postbuild": "npm run migrate",
-    "migrate":"./node_modules/sequelize-cli/lib/sequelize db:migrate"
-
+    "heroku-postbuild": "npm run migrate"
   },
   "repository": {
     "type": "git",
@@ -42,7 +40,7 @@
     "path": "^0.12.7",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.37.1",
+    "sequelize": "^4.37.4",
     "swagger-ui-express": "^2.0.15",
     "uuid": "^3.2.1",
     "validator": "^9.4.1",
