@@ -11,7 +11,7 @@
     "postinstall":"npm run build",
     "build": "babel server -d server/server",
     "heroku-postbuild": "npm run migrate",
-    "migrate":"sequelize db:migrate"
+    "migrate":"./node_modules/sequelize-cli/lib/sequelize db:migrate"
 
   },
   "repository": {
