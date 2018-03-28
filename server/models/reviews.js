@@ -6,16 +6,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false
     },
-    businessid: {
-      type: DataTypes.UUID,
-      allowNull: false
-    },
     ratingsid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
+    },
+    rating: {
+      type: DataTypes.INTEGER
     }
   });
+  Reviews.associate = (models) => {
+    Reviews.belongsTo(models.Businesses, {
+      foreignKey: 'businessid',
+      onDelete: 'CASCADE',
+    });
+  };
+
   return Reviews;
 };
