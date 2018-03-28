@@ -29,6 +29,7 @@ class Auth {
           const hasErr = !!err;
           if (hasMatchedPassword) {
             const token = jswebtoken.sign({ user }, process.env.SECRET_KEY, { expiresIn: '7d' });
+            delete user.password;
             return res.status(200).send({
               message: 'Login success',
               token,
@@ -62,13 +63,15 @@ class Auth {
       password
     } = req.body;
     return db.Users.findOne({
-      [Sequelize.Op.or]: [{ email }, { mobile }]
+      where: {
+        [Sequelize.Op.or]: [{ email }, { mobile }]
+      }
     })
       .then((user) => {
         const hasNoUser = !!user;
         if (hasNoUser) {
           return res.status(400).send({
-            message: 'Error Non-Unique Email Or Mobile.'
+            message: 'Error Non-Unique Email Or Mobile.',
           });
         }
         bcrypt.hash(password, 8, (err, hash) => {
@@ -87,6 +90,7 @@ class Auth {
           })
             .then((newUser) => {
               const token = jswebtoken.sign({ user }, process.env.SECRET_KEY, { expiresIn: '7d' });
+              delete newUser.password;
               return res.status(201).send({
                 message: 'successfully created a new user',
                 user: newUser,

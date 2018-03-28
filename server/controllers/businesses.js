@@ -27,7 +27,7 @@ class Businesses {
       userid
     } = req.body;
     return db.Businesses.findOne({
-      [Sequelize.Op.or]: [{ email }, { telephoneNumber }]
+      where: { [Sequelize.Op.or]: [{ email }, { telephoneNumber }] }
     })
       .then((business) => {
         const hasBusiness = !!business;
