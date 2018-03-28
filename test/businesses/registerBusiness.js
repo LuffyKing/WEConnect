@@ -1,22 +1,22 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server/server';
-import { businesses, users } from '../../server/dummy-data/database';
+import db from '../../server/models';
 
 chai.should();
 chai.use(chaiHttp);
 const newBusiness = {
   businessName: 'Swordcorp',
-  telephoneNumber: '01-3000001',
+  telephoneNumber: '01-23000001',
   email: 'pr@swordcorp.com',
-  businessWebsite: 'www.swordcorp.com',
+  businessWebsite: 'www.3swordcorp.com',
   industry: 'Weapons',
   description: 'Weapons leaders with offices in North America and Europe',
   street: '4 Forloop lane',
   city: 'San Francisco',
   country: 'United States',
   state: 'California',
-  userid: users[0].userid
+  userid: db.Users.findOne({ where: { name: 'Oyindamola' } }).userid
 };
 const newBusinessNotAllFieldsFilled = {
   businessName: 'Hintcorp',
@@ -27,8 +27,9 @@ const newBusinessNotAllFieldsFilled = {
   city: 'San Francisco',
   country: 'United States',
   state: 'California',
-  userid: users[1].userid
+  userid: db.Users.findOne({ where: { name: 'Oyindamola' } }).userid
 };
+const businessAlreadyExisting = db.Businesses.findOne({ where: { name: 'Swordcorp' } });
 
 describe('Business API registerBusiness Tests', () => {
   describe('/POST registerBusiness', () => {
@@ -67,11 +68,11 @@ describe('Business API registerBusiness Tests', () => {
 
   describe('/POST registerBusiness', () => {
     it(
-      'should try to POST and register a business with all',
+      'should try to POST and register a business that already exists',
       (done) => {
         chai.request(server)
           .post('/api/v1/businesses/')
-          .send(businesses[0])
+          .send(businessAlreadyExisting)
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.an('object');

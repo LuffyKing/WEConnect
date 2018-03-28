@@ -1,25 +1,8 @@
-import uuidv4 from 'uuid/v4';
-import moment from 'moment';
-import Businesses from './businesses';
+import db from '../models';
 /**
  * A class that handles the reviews api operation
  */
-class Reviews extends Businesses {
-  /**
- * Takes in a list of businesses,reviews and users binds the class' this to methods
- * getAllReviews, addReview and findUser
- * @param {Object[]} businesses The list of businesses.
- * @param {Object}  reviews object of business objects containing list of reviews.
- * @param {Object[]} users The list of users.
- */
-  constructor(businesses, reviews, users) {
-    super(businesses);
-    this.reviews = reviews;
-    this.users = users;
-    this.getAllReviews = this.getAllReviews.bind(this);
-    this.addReview = this.addReview.bind(this);
-    this.findUser = this.findUser.bind(this);
-  }
+class Reviews {
   /**
   * It adds a review to a business based on the businessid
   * @param {Object} req - request object containing params and body
@@ -30,43 +13,34 @@ class Reviews extends Businesses {
   * response the newReview is sent as a response as well as a success message
   * other responses are accompanied with an error message
   */
-  addReview(req, res) {
+  static addReview(req, res) {
     const {
       userid,
       rating,
-      description
+      description,
+      firstName,
+      lastName
     } = req.body;
+
     const {
       businessid
     } = req.params;
-    const userSearchResult = this.findUser(userid);
-    const isValidUser = !!userSearchResult;
-    const isValidBusiness = !!this.findBusinessAllUsers(businessid);
-    if (isValidBusiness && isValidUser) {
-      const newReview = {
+    return db.Reviews
+      .create({
+        businessid,
         userid,
         rating,
         description,
-        dateCreated: moment(),
-        reviewId: uuidv4(),
-        firstName: userSearchResult.firstName,
-        lastName: userSearchResult.lastName
-      };
-      try {
-        this.reviews[businessid].push(newReview);
-      } catch (err) {
-        this.reviews[businessid] = [];
-        this.reviews[businessid].push(newReview);
-      }
-      this.reviews[businessid].push(newReview);
-      return res.status(200).send({
+        firstName,
+        lastName
+      })
+      .then(newReview => res.status(201).send({
         message: 'Successfully created a new review',
         newReview
-      });
-    }
-    return res.status(404).send({
-      message: 'Error User or Business not found'
-    });
+      }))
+      .catch(error => res.status(400).send({
+        message: error
+      }));
   }
   /**
   * It gets all reviews about a business based on the businessid posted
@@ -76,33 +50,30 @@ class Reviews extends Businesses {
   * and a list of reviews for a business or 404 depending on whether the
   * businessid is found within the list of businesses
   */
-  getAllReviews(req, res) {
+  static getAllReviews(req, res) {
     const {
       businessid
     } = req.params;
-    const bizFound = this.findBusinessAllUsers(businessid);
-    const isValidBusiness = !!bizFound;
-    if (isValidBusiness) {
-      const reviewsForBiz = this.reviews[businessid];
-      return res.status(200).send({
-        message: `Successfully retrieved reviews for ${bizFound.businessName}`,
-        reviews: reviewsForBiz
-      });
-    }
-    return res.status(404).send({
-      message: 'Error Business not found'
-    });
-  }
-  /**
-  * It finds a user based on the userid supplied
-  * @param {Object} userid - the id of the user
-  * @returns {Object} - returns the user found based on the userid provided
-  * or returns undefined if a match with the user id provided could not be
-  * found
-  */
-  findUser(userid) {
-    const foundUser = this.users.find(user => user.userid === userid);
-    return foundUser;
+    return db.Reviews.findAll({
+      where: {
+        businessid
+      }
+    }).then((reviews) => {
+      const hasReviews = !!reviews;
+      if (hasReviews) {
+        return res.status(200).send({
+          message: 'Successfully retrieved reviews',
+          reviews
+        });
+      } else if (!hasReviews) {
+        return res.status(404).send({
+          message: 'No Reviews Found'
+        });
+      }
+    })
+      .catch(error => res.status(400).send({
+        message: error
+      }));
   }
 }
 export default Reviews;

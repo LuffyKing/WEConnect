@@ -1,11 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server/server';
-import { businesses } from '../../server/dummy-data/database';
+import db from '../../server/models';
 
 chai.should();
 chai.use(chaiHttp);
-const { businessid } = businesses[0];
+const { businessid } = db.Businesses.findOne({ where: { name: 'Swordcorp' } });
 describe('Business API removeBusiness Tests', () => {
   describe('/DELETE removeBusiness', () => {
     it('should DELETE a business specified by the businessid', (done) => {

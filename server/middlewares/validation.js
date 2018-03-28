@@ -1,4 +1,6 @@
+import jsonwebtoken from 'jsonwebtoken';
 import validator from 'validator';
+import db from '../models';
 
 const businessFormInputChecker = ({
   businessName,
@@ -10,8 +12,7 @@ const businessFormInputChecker = ({
   street,
   city,
   country,
-  state,
-  userid
+  state
 }) => !validator.isEmpty(businessName.trim()) &&
     !validator.isEmpty(telephoneNumber.trim()) &&
     validator.isEmail(email.trim()) &&
@@ -21,8 +22,7 @@ const businessFormInputChecker = ({
     !validator.isEmpty(country.trim()) &&
     !validator.isEmpty(state.trim()) &&
     !validator.isEmpty(description.trim()) &&
-    validator.isURL(businessWebsite.trim()) &&
-    validator.isUUID(userid.trim());
+    validator.isURL(businessWebsite.trim());
 const specialValidation = {
   email: validator.isEmail,
   userid: validator.isUUID,
@@ -32,7 +32,7 @@ const specialValidation = {
   ratingOption: { min: 0, max: 5 }
 };
 
-const checkUUID = uuid => validator.isUUID(uuid.trim());
+const checkUUID = uuid => validator.isUUID(String(uuid).trim());
 
 const invalidFieldsChecker = reqBody => Object.keys(reqBody).filter((elm) => {
   if (`${elm}` in specialValidation) {
@@ -115,19 +115,17 @@ const signUpValidator = (req, res, next) => {
 };
 
 const registerBusinessValidator = (req, res, next) => {
-  const {
-    businessName,
-    telephoneNumber,
-    email,
-    businessWebsite,
-    industry,
-    description,
-    street,
-    city,
-    country,
-    state,
-    userid
-  } = req.body;
+  let businessName;
+  let telephoneNumber;
+  let email;
+  let businessWebsite;
+  let industry;
+  let description;
+  let street;
+  let city;
+  let country;
+  let state;
+  let userid;
   const reqBody = {
     businessName,
     telephoneNumber,
@@ -139,8 +137,22 @@ const registerBusinessValidator = (req, res, next) => {
     city,
     country,
     state,
-    userid
+    userid,
+    ...req.body
   };
+  const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      return err;
+    } else if (!err) {
+      return user;
+    }
+  });
+  if (decodedUser.user.userid !== reqBody.userid) {
+    return res.status(401).send({
+      message: 'Invalid authentication token'
+    });
+  }
+
   const emptyFieldsArr = emptyFieldsFinder(reqBody);
   if (emptyFieldsArr.length > 0) {
     const fields = emptyFieldsArr.join(', ');
@@ -150,7 +162,24 @@ const registerBusinessValidator = (req, res, next) => {
   } else if (
     businessFormInputChecker(reqBody)
   ) {
-    next();
+    const isUUID = validator.isUUID(reqBody.userid.trim());
+
+    if (isUUID) {
+      db.Users.findOne({ where: { userid: reqBody.userid } }).then((user) => {
+        const hasUser = !!user;
+        if (hasUser) {
+          next();
+        } else {
+          return res.status(400).send({
+            message: 'User id is invalid because user was not found'
+          });
+        }
+      });
+    } else {
+      return res.status(400).send({
+        message: 'User id is invalid because it is not UUID'
+      });
+    }
   } else {
     const invalidFields = invalidFieldsChecker(reqBody);
     return res.status(400).send({
@@ -174,7 +203,28 @@ const invalidFieldsCheckerUpdate = filledFieldsArr => filledFieldsArr.filter((el
 });
 
 const updateBusinessValidator = (req, res, next) => {
+  const { userid } = req.body.userid;
   const { businessid } = req.params;
+  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid } });
+  const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      return err;
+    } else if (!err) {
+      return user;
+    }
+  });
+  if (decodedUser.userid !== userid) {
+    return res.status(401).send({
+      message: 'Invalid authentication token',
+
+    });
+  }
+  if (isNotBusinessOwner) {
+    return res.status(403).send({
+      message: 'Can not update business, if user is not the owner of the business.'
+    });
+  }
+
   if (!checkUUID(businessid)) {
     return res.status(400).send({
       message: 'Supplied Business Id  is not a UUID'
@@ -194,26 +244,70 @@ const updateBusinessValidator = (req, res, next) => {
       });
     }
     if (invalidFieldsArr.length < 1) {
-      next();
+      const isUUID = validator.isUUID(String(userid).trim());
+      if (isUUID) {
+        db.Users.findOne({ where: { userid } }).then((user) => {
+          const hasUser = !!user;
+          if (hasUser) {
+            const filledFields = Object.keys(req.body).filter(element => !!req.body[element]);
+            const filledFieldsObj = filledFields.reduce((acc, cur) => {
+              acc[cur] = cur;
+              return acc;
+            }, {});
+            req.body.filledFields = filledFieldsObj;
+            next();
+          } else {
+            return res.status(400).send({
+              message: 'User id is invalid because user was not found'
+            });
+          }
+        });
+      } else {
+        return res.status(400).send({
+          message: 'User id is invalid because it is not UUID'
+        });
+      }
     }
   }
 };
 
 const businessidValidator = (req, res, next) => {
   const { businessid } = req.params;
-  if (!businessid) {
+  const hasNoBusinessId = !businessid;
+  if (hasNoBusinessId) {
     return res.status(400).send({
       message: 'BusinessId not provided'
     });
-  }
-  if (validator.isUUID(businessid)) {
+  } else if (validator.isUUID(String(businessid).trim())) {
     next();
-  }
-  if (!validator.isUUID(businessid)) {
+  } else {
     return res.status(400).send({
       message: 'Business Id provided is not a UUID'
     });
   }
+};
+
+const removeBusinessValidator = (req, res, next) => {
+  const { userid } = req.body;
+  const { businessid } = req.params;
+  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid } });
+  const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      return err;
+    } else if (!err) {
+      return user;
+    }
+  });
+  if (decodedUser.userid !== userid) {
+    return res.status(401).send({
+      message: 'Invalid authentication token'
+    });
+  } else if (isNotBusinessOwner) {
+    return res.status(403).send({
+      message: 'Can not delete business, if user is not the owner of the business.'
+    });
+  }
+  next();
 };
 
 const getAllBusinessesValidator = (req, res, next) => {
@@ -232,8 +326,11 @@ const getAllBusinessesValidator = (req, res, next) => {
     next();
   }
 };
+
 const addReviewValidator = (req, res, next) => {
-  let userid, rating, description;
+  let userid;
+  let rating;
+  let description;
   let reqBody = req.body;
   reqBody = {
     userid,
@@ -241,9 +338,11 @@ const addReviewValidator = (req, res, next) => {
     description,
     ...reqBody
   };
+  const userIdIsUUID = checkUUID(userid);
+  const businessIdIsUUId = checkUUID(req.params.businessid);
   const emptyFields = emptyFieldsFinder(reqBody);
   const invalidFields = invalidFieldsChecker(req.body);
-  if (!checkUUID(req.params.businessid)) {
+  if (!businessIdIsUUId) {
     return res.status(400).send({
       message: 'Supplied Business Id  is not a UUID'
     });
@@ -258,10 +357,36 @@ const addReviewValidator = (req, res, next) => {
   } else if (
     validator.isInt(String(req.body.rating).trim(), { min: 0, max: 5 }) &&
     !validator.isEmpty(req.body.description.trim()) &&
-    validator.isUUID(req.body.userid.trim()) &&
-    validator.isUUID(req.params.businessid.trim())
+    userIdIsUUID &&
+    businessIdIsUUId
   ) {
-    next();
+    db.Businesses.findOne({ where: req.params.businessid }).then((business) => {
+      const isBusiness = !!business;
+      if (isBusiness) {
+        if (userIdIsUUID) {
+          db.Users.findOne({ where: { userid } }).then((user) => {
+            const isUser = !!user;
+            if (isUser) {
+              req.body.firstName = user.firstName;
+              req.body.lastName = user.lastName;
+              next();
+            } else {
+              return res.status(400).send({
+                message: 'User id is invalid because the user was not found'
+              });
+            }
+          });
+        } else {
+          return res.status(400).send({
+            message: 'User id is invalid because it is not UUID'
+          });
+        }
+      } else {
+        return res.status(400).send({
+          message: 'Business id is invalid because the business was not found'
+        });
+      }
+    });
   }
 };
 
@@ -273,5 +398,6 @@ module.exports = {
   registerBusinessValidator,
   loginValidator,
   signUpValidator,
-  addReviewValidator
+  addReviewValidator,
+  removeBusinessValidator
 };

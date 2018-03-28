@@ -15,20 +15,22 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    userid: { type: DataTypes.UUID, allowNull: false },
     city: { allowNull: false, type: DataTypes.STRING },
     country: { allowNull: false, type: DataTypes.STRING },
     industry: { allowNull: false, type: DataTypes.STRING },
     state: { allowNull: false, type: DataTypes.STRING },
     description: { type: DataTypes.STRING },
-    businessWebsite: { type: DataTypes.STRING }
+    businessWebsite: { type: DataTypes.STRING },
+    userid: {
+      type: DataTypes.UUID,
+      allowNull: false
+    }
   });
   Businesses.associate = (models) => {
     Businesses.hasMany(models.Reviews, {
-      foreignKey: 'businessid',
-      as: 'Reviews'
+      foreignKey: 'businessid'
     });
-    Businesses.belongsTo(models.User, {
+    Businesses.belongsTo(models.Users, {
       foreignKey: 'userid',
       onDelete: 'CASCADE',
     });

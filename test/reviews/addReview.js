@@ -1,33 +1,33 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server/server';
-import { businesses, users } from '../../server/dummy-data/database';
+import db from '../../server/models';
 
 chai.use(chaiHttp);
 
 const review = {
-  userid: users[1].userid,
+  userid: db.Users.findOne({ where: { name: 'Oyindamola' } }).userid,
   rating: 5,
   description: 'Really enjoyable place to work at'
 };
 
 const reviewRatingAbove5 = {
-  userid: users[1].userid,
+  userid: db.Users.findOne({ where: { name: 'Oyindamola' } }).userid,
   rating: 10,
   description: 'Really enjoyable place to work at'
 };
 
 const reviewNoDescription = {
-  userid: users[2].userid,
+  userid: db.Users.findOne({ where: { name: 'Oyindamola' } }).userid,
   rating: 3,
 };
 
 const reviewNoRating = {
-  userid: users[2].userid,
+  userid: db.Users.findOne({ where: { name: 'Oyindamola' } }).userid,
   description: 'Sword art online style firm'
 };
 
-const { businessid } = businesses[2];
+const { businessid } = db.Businesses.all()[0];
 describe('Reviews API addReview Tests', () => {
   describe('/POST addReview', () => {
     it('should add a review to a business', (done) => {

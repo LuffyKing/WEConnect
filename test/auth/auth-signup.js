@@ -6,18 +6,17 @@ chai.use(chaiHttp);
 const signup = {
   firstName: 'Damola',
   lastName: 'Kingrade',
-  mobile: '09078821345',
-  email: 'aderinwale90@gmail.com',
+  mobile: '09078821344',
+  email: 'aderinwale08790@gmail.com',
   password: 'Damolaisno1!'
 };
 
 const signUpDuplicateMobileAndEmail = {
-  firstName: 'Oyindamola',
-  lastName: 'Kinger',
-  mobile: '08182924615',
-  email: 'ade@gmail.com',
-  userid: 3,
-  password: 'damola'
+  firstName: 'Damola',
+  lastName: 'Kingrade',
+  mobile: '09078821345',
+  email: 'aderinwale90@gmail.com',
+  password: 'Damolaisno1!'
 };
 
 
