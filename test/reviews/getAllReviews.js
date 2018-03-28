@@ -2,12 +2,12 @@ import uuidv4 from 'uuid/v4';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server/server';
-import { businesses } from '../../server/dummy-data/database';
+import db from '../../server/models';
 
 
 chai.use(chaiHttp);
 
-const { businessid } = businesses[2];
+const { businessid } = db.Businesses.all()[0];
 describe('Reviews API getAllReviews Tests', () => {
   describe('/GET getAllReviews', () => {
     it('should get all reviews about a business', (done) => {

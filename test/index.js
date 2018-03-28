@@ -1,15 +1,10 @@
-import './auth/auth-login';
 import './auth/auth-signup';
-import './businesses/findBusiness';
-import './businesses/findBusinessAllUsers';
-import './businesses/findBusinessArrPosition';
+import './auth/auth-login';
 import './businesses/getAllBusinesses';
 import './businesses/getBusiness';
-import './businesses/hasUniqueEmail';
-import './businesses/hasUniqueTelephoneNumber';
-import './businesses/registerBusiness';
 import './businesses/removeBusiness';
 import './businesses/updateBusinesses';
 import './reviews/addReview';
 import './reviews/getAllReviews';
+import './businesses/registerBusiness';
 import './badRequests/badApiRequest';

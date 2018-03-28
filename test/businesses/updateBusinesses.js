@@ -2,7 +2,7 @@ import uuidv4 from 'uuid/v4';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server/server';
-import { businesses } from '../../server/dummy-data/database';
+import db from '../../server/models/index';
 
 
 chai.should();
@@ -10,7 +10,34 @@ const updatesToBusiness = {
   businessName: 'Brucecorp',
   industry: 'Batman gear'
 };
-const { businessid } = businesses[1];
+db.Businesses.create({
+  businessName: 'Swordcorp',
+  telephoneNumber: '01-23000001',
+  email: 'pewr@swordcorp.com',
+  businessWebsite: 'www.rwswordcorp.com',
+  industry: 'Weapons',
+  description: 'Weapons leaders with offices in North America and Europe',
+  street: '4 Forloop lane',
+  city: 'San Francisco',
+  country: 'United States',
+  state: 'California',
+  userid: db.Users.findOne({ where: { name: 'Damola' } }).userid,
+});
+db.Businesses.create({
+  businessName: 'Swordcorp',
+  telephoneNumber: '01-23we000001',
+  email: 'pewewr@swordcorp.com',
+  businessWebsite: 'www.recwswordcorp.com',
+  industry: 'Weapons',
+  description: 'Weapons leaders with offices in North America and Europe',
+  street: '4 Forloop lane',
+  city: 'San Francisco',
+  country: 'United States',
+  state: 'California',
+  userid: db.Users.findOne({ where: { name: 'Damola' } }).userid
+});
+
+const { businessid } = db.Businesses.findAll()[0];
 chai.use(chaiHttp);
 
 describe('Business API updateBusiness Tests', () => {

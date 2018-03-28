@@ -10,7 +10,7 @@ chai.use(chaiHttp);
  */
 const login = {
   email: 'aderinwale17@gmail.com',
-  password: 'damola'
+  password: 'aderinwale08790@gmail.com'
 };
 /**
  * Login object for testing failure cases
