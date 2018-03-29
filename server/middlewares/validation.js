@@ -25,7 +25,6 @@ const businessFormInputChecker = ({
     validator.isURL(businessWebsite.trim());
 const specialValidation = {
   email: validator.isEmail,
-  userid: validator.isUUID,
   businessWebsite: validator.isURL,
   businessid: validator.isUUID,
   rating: validator.isInt,
@@ -220,29 +219,23 @@ const updateBusinessValidator = (req, res, next) => {
       });
     }
     if (invalidFieldsArr.length < 1) {
-      const isUUID = validator.isUUID(String(userid).trim());
-      if (isUUID) {
-        db.Users.findOne({ where: { userid } }).then((user) => {
-          const hasUser = !!user;
-          if (hasUser) {
-            const filledFields = Object.keys(req.body).filter(element => !!req.body[element]);
-            const filledFieldsObj = filledFields.reduce((acc, cur) => {
-              acc[cur] = cur;
-              return acc;
-            }, {});
-            req.body.filledFields = filledFieldsObj;
-            next();
-          } else {
-            return res.status(400).send({
-              message: 'User id is invalid because user was not found'
-            });
-          }
-        });
-      } else {
-        return res.status(400).send({
-          message: 'User id is invalid because it is not UUID'
-        });
-      }
+      db.Users.findOne({ where: { userid: decodedUser.userid } }).then((user) => {
+        const hasUser = !!user;
+        if (hasUser) {
+          const filledFields = Object.keys(req.body).filter(element => !!req.body[element]);
+          const filledFieldsObj = filledFields.reduce((acc, cur) => {
+            acc[cur] = cur;
+            return acc;
+          }, {});
+          req.body.filledFields = filledFieldsObj;
+          req.body.userid = decodedUser.userid;
+          next();
+        } else {
+          return res.status(400).send({
+            message: 'User id is invalid because user was not found'
+          });
+        }
+      });
     }
   }
 };
@@ -264,9 +257,7 @@ const businessidValidator = (req, res, next) => {
 };
 
 const removeBusinessValidator = (req, res, next) => {
-  const { userid } = req.body;
   const { businessid } = req.params;
-  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid } });
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
       return err;
@@ -274,15 +265,13 @@ const removeBusinessValidator = (req, res, next) => {
       return user;
     }
   });
-  if (decodedUser.userid !== userid) {
-    return res.status(401).send({
-      message: 'Invalid authentication token'
-    });
-  } else if (isNotBusinessOwner) {
+  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.userid } });
+  if (isNotBusinessOwner) {
     return res.status(403).send({
       message: 'Can not delete business, if user is not the owner of the business.'
     });
   }
+  req.body.userid = decodedUser.userid;
   next();
 };
 
@@ -314,7 +303,14 @@ const addReviewValidator = (req, res, next) => {
     description,
     ...reqBody
   };
-  const userIdIsUUID = checkUUID(userid);
+  const { businessid } = req.params;
+  const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      return err;
+    } else if (!err) {
+      return user;
+    }
+  });
   const businessIdIsUUId = checkUUID(req.params.businessid);
   const emptyFields = emptyFieldsFinder(reqBody);
   const invalidFields = invalidFieldsChecker(req.body);
@@ -333,30 +329,24 @@ const addReviewValidator = (req, res, next) => {
   } else if (
     validator.isInt(String(req.body.rating).trim(), { min: 0, max: 5 }) &&
     !validator.isEmpty(req.body.description.trim()) &&
-    userIdIsUUID &&
     businessIdIsUUId
   ) {
     db.Businesses.findOne({ where: req.params.businessid }).then((business) => {
       const isBusiness = !!business;
       if (isBusiness) {
-        if (userIdIsUUID) {
-          db.Users.findOne({ where: { userid } }).then((user) => {
-            const isUser = !!user;
-            if (isUser) {
-              req.body.firstName = user.firstName;
-              req.body.lastName = user.lastName;
-              next();
-            } else {
-              return res.status(400).send({
-                message: 'User id is invalid because the user was not found'
-              });
-            }
-          });
-        } else {
-          return res.status(400).send({
-            message: 'User id is invalid because it is not UUID'
-          });
-        }
+        db.Users.findOne({ where: { userid: decodedUser.userid} }).then((user) => {
+          const isUser = !!user;
+          if (isUser) {
+            req.body.firstName = user.firstName;
+            req.body.lastName = user.lastName;
+            req.body.userid = decodedUser.userid;
+            next();
+          } else {
+            return res.status(400).send({
+              message: 'User id is invalid because the user was not found'
+            });
+          }
+        });
       } else {
         return res.status(400).send({
           message: 'Business id is invalid because the business was not found'
