@@ -1,5 +1,5 @@
 import express from 'express';
-import reviews from '../../controllers/reviews';
+import reviews from '../../controllers/reviews2';
 import validation from '../../middlewares/validation';
 
 const reviewRouter = express.Router({ mergeParams: true });
