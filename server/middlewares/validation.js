@@ -53,7 +53,6 @@ const emptyFieldsFinder = (reqBody) => {
 
 const loginValidator = (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email);
   const noEmail = !email;
   const noPassword = !password;
   if (noEmail && noPassword) {
@@ -158,6 +157,7 @@ const registerBusinessValidator = (req, res, next) => {
       db.Users.findOne({ where: { userid: decodedUser.user.userid } }).then((user) => {
         const hasUser = !!user;
         if (hasUser) {
+          req.body.userid = decodedUser.user.userid
           next();
         } else {
           return res.status(400).send({
