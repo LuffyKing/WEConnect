@@ -7,7 +7,7 @@ import db from '../models';
  */
 const errDisplayMessage = (res, errstatus, message) => res.status(errstatus).send({ message});
 
-const UsersContollers = {
+const users = {
   loginUser: (res, req) => {
     const { email, password } = req.body;
     return db.Users.findOne({ where: { email } })
@@ -86,4 +86,4 @@ const UsersContollers = {
   }
 };
 
-export default UsersContollers;
+export default users;

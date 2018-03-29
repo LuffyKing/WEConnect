@@ -2,7 +2,7 @@ import db from '../models';
 /**
  * A class that handles the reviews api operation
  */
-const ReviewsContoller = {
+const reviews = {
    /**
   * It adds a review to a business based on the businessid
   * @param {Object} req - request object containing params and body
@@ -77,4 +77,4 @@ const ReviewsContoller = {
   }
 }
 
-export default ReviewsContoller;
+export default reviews;
