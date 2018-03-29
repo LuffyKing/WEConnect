@@ -9,7 +9,7 @@
     "start": "babel-node server/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate",
-    "build-babel": "babel server -d dist",
+    "build-babel": "babel server -d server/server",
     "heroku-postbuild": "npm run migrate",
     "clean-dist": "rm -rf dist && mkdir dist"
   },
