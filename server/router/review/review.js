@@ -1,11 +1,11 @@
 import express from 'express';
-import Reviews from '../../controllers/Reviews';
+import ReviewsController from '../../controllers/Reviews';
 import validation from '../../middlewares/validation';
 
 const reviewRouter = express.Router({ mergeParams: true });
 
-reviewRouter.post('/', validation.addReviewValidator, Reviews.addReview);
+reviewRouter.post('/', validation.addReviewValidator, ReviewsController .addReview);
 
-reviewRouter.get('/', validation.businessidValidator, Reviews.getAllReviews);
+reviewRouter.get('/', validation.businessidValidator, ReviewsController .getAllReviews);
 
 export default reviewRouter;

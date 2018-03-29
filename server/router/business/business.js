@@ -1,17 +1,17 @@
 import express from 'express';
-import Businesses from '../../controllers/Businesses';
+import BusinessesController from '../../controllers/Businesses';
 import validation from '../../middlewares/validation';
 import verifyToken from '../../middlewares/verifyToken';
 
 const businessRouter = express.Router();
 
-businessRouter.post('/', verifyToken, validation.registerBusinessValidator, Businesses.registerBusiness);
+businessRouter.post('/', verifyToken, validation.registerBusinessValidator, BusinessesController.registerBusiness);
 
-businessRouter.put('/:businessid', verifyToken, validation.updateBusinessValidator, Businesses.updateBusiness);
+businessRouter.put('/:businessid', verifyToken, validation.updateBusinessValidator, BusinessesController.updateBusiness);
 
-businessRouter.delete('/:businessid', verifyToken, validation.businessidValidator, Businesses.removeBusiness);
+businessRouter.delete('/:businessid', verifyToken, validation.businessidValidator, BusinessesController.removeBusiness);
 
-businessRouter.get('/:businessid', validation.businessidValidator, Businesses.getBusiness);
+businessRouter.get('/:businessid', validation.businessidValidator, BusinessesController.getBusiness);
 
-businessRouter.get('/', validation.getAllBusinessesValidator, Businesses.getAllBusinesses);
+businessRouter.get('/', validation.getAllBusinessesValidator, BusinessesController.getAllBusinesses);
 export default businessRouter;
