@@ -68,8 +68,6 @@ const loginValidator = (req, res, next) => {
     return res.status(400).send({ message: 'Email provided is not an email' });
   }
   if (!noPassword && !noEmail) {
-    req.body.email = email;
-    req.body.password = password;
     next();
   }
 };
@@ -82,7 +80,6 @@ const signUpValidator = (req, res, next) => {
     email,
     password
   } = req.body;
-  console.log(email);
   if (!email) {
     return res.status(400).send({
       message: 'Error Email not Provided'
