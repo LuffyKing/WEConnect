@@ -184,7 +184,6 @@ const invalidFieldsCheckerUpdate = filledFieldsArr => filledFieldsArr.filter((el
 });
 
 const updateBusinessValidator = (req, res, next) => {
-  const { userid } = req.body.userid;
   const { businessid } = req.params;
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
@@ -334,7 +333,7 @@ const addReviewValidator = (req, res, next) => {
     db.Businesses.findOne({ where: req.params.businessid }).then((business) => {
       const isBusiness = !!business;
       if (isBusiness) {
-        db.Users.findOne({ where: { userid: decodedUser.user.userid} }).then((user) => {
+        db.Users.findOne({ where: { userid: decodedUser.user.userid}}).then((user) => {
           const isUser = !!user;
           if (isUser) {
             req.body.firstName = user.firstName;
