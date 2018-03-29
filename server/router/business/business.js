@@ -1,5 +1,5 @@
 import express from 'express';
-import BusinessesController from '../../controllers/Businesses';
+import BusinessesController from '../../controllers/businesses';
 import validation from '../../middlewares/validation';
 import verifyToken from '../../middlewares/verifyToken';
 
