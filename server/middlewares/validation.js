@@ -42,7 +42,7 @@ const invalidFieldsChecker = reqBody => Object.keys(reqBody).filter((elm) => {
 
     return !specialValidation[elm](reqBody[elm].trim());
   }
-  return validator.isEmpty(reqBody[elm].trim());
+  return !validator.isAlphanumeric(String(reqBody[elm].trim()));
 });
 
 const emptyFieldsFinder = (reqBody) => {
@@ -102,9 +102,9 @@ const signUpValidator = (req, res, next) => {
   if (
     validator.isEmail(email.trim()) &&
     validator.isMobilePhone(mobile.trim(), 'any') &&
-    !validator.isEmpty(firstName.trim()) &&
-    !validator.isEmpty(lastName.trim()) &&
-    !validator.isEmpty(password.trim())
+    validator.isAlphanumeric(firstName.trim()) &&
+    validator.isAlphanumeric(lastName.trim()) &&
+    validator.isisAlphanumeric(password.trim())
   ) {
     next();
   } else {
@@ -125,7 +125,6 @@ const registerBusinessValidator = (req, res, next) => {
   let city;
   let country;
   let state;
-  let userid;
   const reqBody = {
     businessName,
     telephoneNumber,
@@ -137,7 +136,6 @@ const registerBusinessValidator = (req, res, next) => {
     city,
     country,
     state,
-    userid,
     ...req.body
   };
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
@@ -147,11 +145,6 @@ const registerBusinessValidator = (req, res, next) => {
       return user;
     }
   });
-  if (decodedUser.user.userid !== reqBody.userid) {
-    return res.status(401).send({
-      message: 'Invalid authentication token'
-    });
-  }
 
   const emptyFieldsArr = emptyFieldsFinder(reqBody);
   if (emptyFieldsArr.length > 0) {
@@ -162,10 +155,8 @@ const registerBusinessValidator = (req, res, next) => {
   } else if (
     businessFormInputChecker(reqBody)
   ) {
-    const isUUID = validator.isUUID(reqBody.userid.trim());
 
-    if (isUUID) {
-      db.Users.findOne({ where: { userid: reqBody.userid } }).then((user) => {
+      db.Users.findOne({ where: { userid: decodedUser.id } }).then((user) => {
         const hasUser = !!user;
         if (hasUser) {
           next();
@@ -175,16 +166,7 @@ const registerBusinessValidator = (req, res, next) => {
           });
         }
       });
-    } else {
-      return res.status(400).send({
-        message: 'User id is invalid because it is not UUID'
-      });
-    }
-  } else {
-    const invalidFields = invalidFieldsChecker(reqBody);
-    return res.status(400).send({
-      message: `Error Required Fields ${invalidFields.join(', ')} Values are Invalid`
-    });
+
   }
 };
 
@@ -282,7 +264,7 @@ const businessidValidator = (req, res, next) => {
     next();
   } else {
     return res.status(400).send({
-      message: 'Business Id provided is not a UUID'
+      message: 'Business not found'
     });
   }
 };
@@ -343,8 +325,8 @@ const addReviewValidator = (req, res, next) => {
   const emptyFields = emptyFieldsFinder(reqBody);
   const invalidFields = invalidFieldsChecker(req.body);
   if (!businessIdIsUUId) {
-    return res.status(400).send({
-      message: 'Supplied Business Id  is not a UUID'
+    return res.status(404).send({
+      message: 'No business found'
     });
   } else if (invalidFields.length > 0) {
     return res.status(400).send({
