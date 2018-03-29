@@ -8,7 +8,8 @@ import db from '../models';
 const errDisplayMessage = (res, errstatus, message) => res.status(errstatus).send({ message});
 
 const users = {
-  loginUser: (res, req) => {
+  loginUser: (req, res) => {
+    console.log(req.body);
     const { email, password } = req.body;
     return db.Users.findOne({ where: { email } })
       .then((user) => {
@@ -20,13 +21,9 @@ const users = {
           const hasErr = !!err;
           if (hasMatchedPassword) {
             const token = jswebtoken.sign({ user }, process.env.SECRET_KEY, { expiresIn: '7d' });
-            const loggedInUser = { ...user };
-            loggedInUser.password = '';
-            delete loggedInUser.password;
             return res.status(200).send({
               message: 'Login success',
-              token,
-              loggedInUser
+              token
             });
           } else if (hasErr) {
             return res.status(400).send({
@@ -60,7 +57,7 @@ const users = {
           if (hasErr) {
             return errDisplayMessage(res, 500, err);
           }
-          db.Users.create({
+          return db.Users.create({
             firstName,
             lastName,
             mobile,
@@ -69,18 +66,12 @@ const users = {
           })
             .then((newUser) => {
               const token = jswebtoken.sign({ newUser }, process.env.SECRET_KEY, { expiresIn: '7d' });
-              const createdUser = { ...newUser };
-              createdUser.password = '';
-              delete createdUser.password;
+
               return res.status(201).send({
                 message: 'Successfully created a new user',
-                user: createdUser,
                 token
               });
-            })
-            .catch(error => res.status(400).send({
-              message: error
-            }));
+            }).catch(err => ({message: err }));
         });
       });
   }
