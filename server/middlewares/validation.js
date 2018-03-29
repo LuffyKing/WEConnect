@@ -154,7 +154,6 @@ const registerBusinessValidator = (req, res, next) => {
   } else if (
     businessFormInputChecker(reqBody)
   ) {
-
       db.Users.findOne({ where: { userid: decodedUser.id } }).then((user) => {
         const hasUser = !!user;
         if (hasUser) {
