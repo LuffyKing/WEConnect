@@ -36,7 +36,7 @@ const businesses = {
             message: 'Error Non-Unique Email Or Telephone Number.'
           });
         }
-        db.Businesses.create({
+        return db.Businesses.create({
           businessName,
           telephoneNumber,
           email,
