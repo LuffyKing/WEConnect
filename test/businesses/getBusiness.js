@@ -1,12 +1,29 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server/server';
-import db from '../../server/models';
 
-const { businessid } = db.Businesses.findOne({ where: { name: 'Swordcorp' } });
+let token;
+let businessid;
 chai.should();
 chai.use(chaiHttp);
+const testBiz = {
+    "businessName": "Tenjicorp",
+    "telephoneNumber": "01-39999999",
+    "email": "pr@tenjicorp.com",
+    "businessWebsite": "www.tenjicorp.com",
+    "industry": "agriculture",
+    "description": "Chemical leaders with offices in North America and Europe",
+    "street": "3 Forloop lane",
+    "city": "San Francisco",
+    "country": "United States",
+    "state": "California",
 
+}
+const newUser = {
+    email: 'aderinwale17@gamil.com',
+    password: 'damola'
+  };
+let userid;
 describe('Business API getBusiness Tests', () => {
   describe('/GET getBusiness', () => {
     it('should GET a business specified by the businessid', (done) => {
