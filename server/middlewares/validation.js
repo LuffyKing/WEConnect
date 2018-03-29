@@ -187,7 +187,6 @@ const invalidFieldsCheckerUpdate = filledFieldsArr => filledFieldsArr.filter((el
 const updateBusinessValidator = (req, res, next) => {
   const { userid } = req.body.userid;
   const { businessid } = req.params;
-  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid } });
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
       return err;
@@ -195,12 +194,7 @@ const updateBusinessValidator = (req, res, next) => {
       return user;
     }
   });
-  if (decodedUser.userid !== userid) {
-    return res.status(401).send({
-      message: 'Invalid authentication token',
-
-    });
-  }
+  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.userid } });
   if (isNotBusinessOwner) {
     return res.status(403).send({
       message: 'Can not update business, if user is not the owner of the business.'
@@ -208,8 +202,8 @@ const updateBusinessValidator = (req, res, next) => {
   }
 
   if (!checkUUID(businessid)) {
-    return res.status(400).send({
-      message: 'Supplied Business Id  is not a UUID'
+    return res.status(404).send({
+      message: 'Buisness Not Found'
     });
   }
   const filledFieldsArr = filledFieldChecker(req.body);
