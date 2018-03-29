@@ -155,7 +155,7 @@ const registerBusinessValidator = (req, res, next) => {
   } else if (
     businessFormInputChecker(reqBody)
   ) {
-      db.Users.findOne({ where: { userid: decodedUser.id } }).then((user) => {
+      db.Users.findOne({ where: { userid: decodedUser.user.userid } }).then((user) => {
         const hasUser = !!user;
         if (hasUser) {
           next();
@@ -193,7 +193,7 @@ const updateBusinessValidator = (req, res, next) => {
       return user;
     }
   });
-  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.userid } });
+  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.user.userid } });
   if (isNotBusinessOwner) {
     return res.status(403).send({
       message: 'Can not update business, if user is not the owner of the business.'
@@ -219,7 +219,7 @@ const updateBusinessValidator = (req, res, next) => {
       });
     }
     if (invalidFieldsArr.length < 1) {
-      db.Users.findOne({ where: { userid: decodedUser.userid } }).then((user) => {
+      db.Users.findOne({ where: { userid: decodedUser.user.userid } }).then((user) => {
         const hasUser = !!user;
         if (hasUser) {
           const filledFields = Object.keys(req.body).filter(element => !!req.body[element]);
@@ -228,7 +228,7 @@ const updateBusinessValidator = (req, res, next) => {
             return acc;
           }, {});
           req.body.filledFields = filledFieldsObj;
-          req.body.userid = decodedUser.userid;
+          req.body.userid = decodedUser.user.userid;
           next();
         } else {
           return res.status(400).send({
@@ -265,13 +265,13 @@ const removeBusinessValidator = (req, res, next) => {
       return user;
     }
   });
-  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.userid } });
+  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.user.userid } });
   if (isNotBusinessOwner) {
     return res.status(403).send({
       message: 'Can not delete business, if user is not the owner of the business.'
     });
   }
-  req.body.userid = decodedUser.userid;
+  req.body.userid = decodedUser.user.userid;
   next();
 };
 
@@ -334,12 +334,12 @@ const addReviewValidator = (req, res, next) => {
     db.Businesses.findOne({ where: req.params.businessid }).then((business) => {
       const isBusiness = !!business;
       if (isBusiness) {
-        db.Users.findOne({ where: { userid: decodedUser.userid} }).then((user) => {
+        db.Users.findOne({ where: { userid: decodedUser.user.userid} }).then((user) => {
           const isUser = !!user;
           if (isUser) {
             req.body.firstName = user.firstName;
             req.body.lastName = user.lastName;
-            req.body.userid = decodedUser.userid;
+            req.body.userid = decodedUser.user.userid;
             next();
           } else {
             return res.status(400).send({
