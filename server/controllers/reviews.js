@@ -2,8 +2,8 @@ import db from '../models';
 /**
  * A class that handles the reviews api operation
  */
-class Reviews {
-  /**
+const Reviews = {
+   /**
   * It adds a review to a business based on the businessid
   * @param {Object} req - request object containing params and body
   * @param {Object} res - response object that conveys the result of the request
@@ -13,7 +13,7 @@ class Reviews {
   * response the newReview is sent as a response as well as a success message
   * other responses are accompanied with an error message
   */
-  static addReview(req, res) {
+  addReview:(req, res) => {
     const {
       userid,
       rating,
@@ -41,8 +41,8 @@ class Reviews {
       .catch(error => res.status(400).send({
         message: error
       }));
-  }
-  /**
+  },
+    /**
   * It gets all reviews about a business based on the businessid posted
   * @param {Object} req - request object containing params and body
   * @param {Object} res - response object that conveys the result of the request
@@ -50,7 +50,7 @@ class Reviews {
   * and a list of reviews for a business or 404 depending on whether the
   * businessid is found within the list of businesses
   */
-  static getAllReviews(req, res) {
+  getAllReviews: (req, res) => {
     const {
       businessid
     } = req.params;
@@ -76,4 +76,5 @@ class Reviews {
       }));
   }
 }
+
 export default Reviews;
