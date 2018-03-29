@@ -6,6 +6,6 @@ const reviewRouter = express.Router({ mergeParams: true });
 
 reviewRouter.post('/', validation.addReviewValidator, ReviewsController.addReview);
 
-reviewRouter.get('/', validation.businessidValidator, ReviewsControllergetAllReviews);
+reviewRouter.get('/', validation.businessidValidator, ReviewsController.getAllReviews);
 
 export default reviewRouter;
