@@ -3,7 +3,7 @@ import db from '../models';
 /**
  * A class that handles the business api operation
  */
-const BusinessesContoller = {
+const BusinessesController = {
   /**
   * It registers a business based off the information posted
   * @param {Object} req - request object containing params and body
