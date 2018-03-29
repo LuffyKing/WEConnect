@@ -6,7 +6,7 @@
   "scripts": {
     "test": "nyc ./node_modules/.bin/mocha --exit --require babel-register test/index.js",
     "build": "npm run clean-dist && npm run build-babel",
-    "start": "npm run build && node dist/server.js",
+    "start": "npm run build && node server/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate",
     "build-babel": "babel server -d dist",
