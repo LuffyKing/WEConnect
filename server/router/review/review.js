@@ -4,8 +4,8 @@ import validation from '../../middlewares/validation';
 
 const reviewRouter = express.Router({ mergeParams: true });
 
-reviewRouter.post('/', validation.addReviewValidator, ReviewsController .addReview);
+reviewRouter.post('/', validation.addReviewValidator, ReviewsController.addReview);
 
-reviewRouter.get('/', validation.businessidValidator, ReviewsController .getAllReviews);
+reviewRouter.get('/', validation.businessidValidator, ReviewsControllergetAllReviews);
 
 export default reviewRouter;
