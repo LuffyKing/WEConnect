@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc ./node_modules/.bin/mocha --exit --require babel-register test/index.js",
-    "start": "node dist/server.js",
+    "build": "npm run clean-dist && npm run build-babel",
+    "start": "npm run build && node ./dist/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate",
-    "postinstall": "npm run clean-dist && npm run build-babel",
     "build-babel": "babel server -d dist",
     "heroku-postbuild": "npm run migrate",
     "clean-dist": "rm -rf dist && mkdir dist"
