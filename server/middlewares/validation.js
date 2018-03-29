@@ -41,7 +41,7 @@ const invalidFieldsChecker = reqBody => Object.keys(reqBody).filter((elm) => {
 
     return !specialValidation[elm](reqBody[elm].trim());
   }
-  return !validator.isAlphanumeric(String(reqBody[elm].trim()));
+  return !validator.isEmpty(String(reqBody[elm].trim()));
 });
 
 const emptyFieldsFinder = (reqBody) => {
@@ -53,6 +53,7 @@ const emptyFieldsFinder = (reqBody) => {
 
 const loginValidator = (req, res, next) => {
   const { email, password } = req.body;
+  console.log(email);
   const noEmail = !email;
   const noPassword = !password;
   if (noEmail && noPassword) {
@@ -67,6 +68,8 @@ const loginValidator = (req, res, next) => {
     return res.status(400).send({ message: 'Email provided is not an email' });
   }
   if (!noPassword && !noEmail) {
+    req.body.email = email;
+    req.body.password = password;
     next();
   }
 };
@@ -79,6 +82,7 @@ const signUpValidator = (req, res, next) => {
     email,
     password
   } = req.body;
+  console.log(email);
   if (!email) {
     return res.status(400).send({
       message: 'Error Email not Provided'
@@ -101,9 +105,9 @@ const signUpValidator = (req, res, next) => {
   if (
     validator.isEmail(email.trim()) &&
     validator.isMobilePhone(mobile.trim(), 'any') &&
-    validator.isAlphanumeric(firstName.trim()) &&
-    validator.isAlphanumeric(lastName.trim()) &&
-    validator.isisAlphanumeric(password.trim())
+    !validator.isEmpty(firstName.trim()) &&
+    !validator.isEmpty(lastName.trim()) &&
+    !validator.isEmpty(password.trim())
   ) {
     next();
   } else {
