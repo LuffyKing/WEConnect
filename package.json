@@ -10,7 +10,7 @@
     "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate",
     "postinstall": "npm run clean-dist && npm run build-babel",
     "build-babel": "babel server -d dist",
-    "heroku-postbuild": "npm run migrate",
+    "heroku-postbuild": "npm run migrate && npm run node dist/server",
     "clean-dist": "rm -rf dist && mkdir dist"
   },
   "repository": {
