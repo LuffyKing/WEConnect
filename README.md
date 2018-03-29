@@ -20,9 +20,8 @@ cd WeConnect
 git init
 git clone https://github.com/LuffyKing/WEConnect.git
 cd WeConnect
-cd client
-yarn install
-yarn buildDev
+npm install
+npm start
 ```
 
 for production
