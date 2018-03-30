@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
+    street: { allowNull: false, type: DataTypes.STRING },
+
     city: { allowNull: false, type: DataTypes.STRING },
     country: { allowNull: false, type: DataTypes.STRING },
     industry: { allowNull: false, type: DataTypes.STRING },
@@ -24,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     userid: {
       type: DataTypes.UUID,
       allowNull: false
-    }
+    },
+
   });
   Businesses.associate = (models) => {
     Businesses.hasMany(models.Reviews, {

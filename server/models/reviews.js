@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
+    description: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
     rating: {
       type: DataTypes.INTEGER
     }
