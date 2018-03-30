@@ -8,7 +8,7 @@
     "build": "npm run clean-dist && npm run build-babel",
     "start": "npm run build && node dist/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate",
+    "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate:undo:all && ./node_modules/sequelize-cli/lib/sequelize db:migrate",
     "build-babel": "babel server -d dist",
     "heroku-postbuild": "npm run migrate",
     "clean-dist": "rm -rf dist && mkdir dist"
