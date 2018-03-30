@@ -1,3 +1,4 @@
+//kk
 module.exports = {
   up: (queryInterface, Sequelize) => {
     queryInterface.addColumn(
