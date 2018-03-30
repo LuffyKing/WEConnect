@@ -158,6 +158,7 @@ const registerBusinessValidator = (req, res, next) => {
       return user;
     }
   });
+  console.log(decodedUser.user.userid)
   if (!decodedUser.user.userid) {
     return res.status(400).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
   }
