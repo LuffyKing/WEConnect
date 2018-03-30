@@ -3,7 +3,7 @@ import db from '../models';
 /**
  * A class that handles the business api operation
  */
-const businesses = {
+const Businesses = {
   /**
   * It registers a business based off the information posted
   * @param {Object} req - request object containing params and body
@@ -85,7 +85,7 @@ const businesses = {
         message: error
       }));
   },
-    /**
+  /**
   * It locates a business based on businessid and updates it based on the
   * information posted
   * @param {Object} req - request object containing params and body
@@ -96,7 +96,7 @@ const businesses = {
   updateBusiness: (req, res) => {
     const { businessid } = req.params;
     return db.Businesses.update(
-      { ...req.body.updateFields },
+      { ...req.body.filledFields },
       { returning: true, where: { businessid } }
     )
       .then(([rowsUpdate, [updatedBusiness]]) => {
@@ -116,7 +116,7 @@ const businesses = {
         message: error
       }));
   },
-    /**
+  /**
   * It locates a business based on businessid provided and returns it
   * @param {Object} req - request object containing params and body
   * @param {Object} res - response object that conveys the result of the request
@@ -146,7 +146,7 @@ const businesses = {
         message: error
       }));
   },
-    /**
+  /**
   * It locates all the businesses in the database and returns them based on filters
   * @param {Object} req - request object containing params and body
   * @param {Object} res - response object that conveys the result of the request
@@ -175,7 +175,7 @@ const businesses = {
               ), {
                 ilike: `%${location}%`
               }),
-              { category: { ilike: `%${category}%` } },
+              { industry: { ilike: `%${category}%` } },
             ]
           }
         }).then((businesses) => {
@@ -195,10 +195,9 @@ const businesses = {
       }
       case 'CATEGORY': {
         return db.Businesses.findAll({
-          where: { [Sequelize.Op.iLike]: `%${category}%` }
+          where: { industry: { ilike: `%${category}%` } }
         }).then((businesses) => {
-          const hasNoBusinesses = !businesses;
-          if (hasNoBusinesses) {
+          if (businesses.length < 1) {
             return res.status(404).send({
               message: 'Businesses not found with the requested Category query'
             });
@@ -212,10 +211,15 @@ const businesses = {
       }
       case 'LOCATION': {
         return db.Businesses.findAll({
-          where: { [Sequelize.Op.iLike]: `%${location}%` }
+          where: Sequelize.where(Sequelize.fn(
+            'concat', Sequelize.col('street'), ' ',
+            Sequelize.col('city'), ' ', Sequelize.col('state'),
+            ' ', Sequelize.col('country')
+          ), {
+            ilike: `%${location}%`
+          })
         }).then((businesses) => {
-          const hasNoBusiness = !businesses;
-          if (hasNoBusiness) {
+          if (businesses.length < 1) {
             return res.status(404).send({
               message: 'Businesses not Found with the requested location query'
             });
@@ -229,8 +233,7 @@ const businesses = {
       }
       default: {
         return db.Businesses.all().then((businesses) => {
-          const hasNoBusinesses = !businesses;
-          if (hasNoBusinesses) {
+          if (businesses.length < 1) {
             return res.status(404).send({
               message: 'No Businesses Available'
             });
@@ -247,4 +250,4 @@ const businesses = {
 };
 
 
-export default businesses;
+export default Businesses;
