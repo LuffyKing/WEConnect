@@ -2,6 +2,8 @@ import jsonwebtoken from 'jsonwebtoken';
 import validator from 'validator';
 import db from '../models';
 
+const assertType = (obj, type) => obj.constructor.name === type.name;
+
 const businessFormInputChecker = ({
   businessName,
   telephoneNumber,
@@ -41,7 +43,7 @@ const invalidFieldsChecker = reqBody => Object.keys(reqBody).filter((elm) => {
 
     return !specialValidation[elm](reqBody[elm].trim());
   }
-  return !validator.isEmpty(String(reqBody[elm].trim()));
+  return validator.isEmpty(String(reqBody[elm].trim()));
 });
 
 const emptyFieldsFinder = (reqBody) => {
@@ -50,6 +52,9 @@ const emptyFieldsFinder = (reqBody) => {
     .map(element => element.replace(/([A-Z])/g, ' $1').toUpperCase());
   return emptyFieldsArr;
 };
+const nonStringFieldChecker = reqBody =>
+  Object.keys(reqBody).filter(elm => !assertType(reqBody[elm], String));
+
 
 const loginValidator = (req, res, next) => {
   const { email, password } = req.body;
@@ -65,6 +70,10 @@ const loginValidator = (req, res, next) => {
     return res.status(400).send({ message: 'Password input is invalid' });
   } else if (!validator.isEmail(email.trim())) {
     return res.status(400).send({ message: 'Email provided is not an email' });
+  } else if (nonStringFieldChecker(req.body).length > 0) {
+    const nonStrings = nonStringFieldChecker(req.body);
+    const isAre = nonStrings.length === 1 ? `field ${nonStrings.join(', ')} is` : `fields ${nonStrings.join(', ')} are`;
+    return res.status(400).send({ message: `The ${isAre} not strings` });
   }
   if (!noPassword && !noEmail) {
     next();
@@ -97,6 +106,11 @@ const signUpValidator = (req, res, next) => {
   }
   if (!password) {
     return res.status(400).send({ message: 'Error password is not provided' });
+  }
+  if (nonStringFieldChecker(req.body).length > 0) {
+    const nonStrings = nonStringFieldChecker(req.body);
+    const isAre = nonStrings.length === 1 ? `field ${nonStrings.join(', ')} is` : `fields ${nonStrings.join(', ')} are`;
+    return res.status(400).send({ message: `The ${isAre} not strings` });
   }
   if (
     validator.isEmail(email.trim()) &&
@@ -151,21 +165,25 @@ const registerBusinessValidator = (req, res, next) => {
     return res.status(400).send({
       message: `Error ${fields} is/are not provided`
     });
+  }
+  if (nonStringFieldChecker(req.body).length > 0) {
+    const nonStrings = nonStringFieldChecker(req.body);
+    const isAre = nonStrings.length === 1 ? `field ${nonStrings.join(', ')} is` : `fields ${nonStrings.join(', ')} are`;
+    return res.status(400).send({ message: `The ${isAre} not strings` });
   } else if (
     businessFormInputChecker(reqBody)
   ) {
-      db.Users.findOne({ where: { userid: decodedUser.user.userid } }).then((user) => {
-        const hasUser = !!user;
-        if (hasUser) {
-          req.body.userid = decodedUser.user.userid
-          next();
-        } else {
-          return res.status(400).send({
-            message: 'User id is invalid because user was not found'
-          });
-        }
-      });
-
+    db.Users.findOne({ where: { userid: decodedUser.user.userid } }).then((user) => {
+      const hasUser = !!user;
+      if (hasUser) {
+        req.body.userid = decodedUser.user.userid;
+        next();
+      } else {
+        return res.status(400).send({
+          message: 'User id is invalid because user was not found'
+        });
+      }
+    });
   }
 };
 
@@ -192,7 +210,9 @@ const updateBusinessValidator = (req, res, next) => {
       return user;
     }
   });
-  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.user.userid } });
+  const isNotBusinessOwner = !db.Businesses.findOne({
+    where: { businessid, userid: decodedUser.user.userid }
+  });
   if (isNotBusinessOwner) {
     return res.status(403).send({
       message: 'Can not update business, if user is not the owner of the business.'
@@ -203,6 +223,11 @@ const updateBusinessValidator = (req, res, next) => {
     return res.status(404).send({
       message: 'Buisness Not Found'
     });
+  }
+  if (nonStringFieldChecker(req.body).length > 0) {
+    const nonStrings = nonStringFieldChecker(req.body);
+    const isAre = nonStrings.length === 1 ? `field ${nonStrings.join(', ')} is` : `fields ${nonStrings.join(', ')} are`;
+    return res.status(400).send({ message: `The ${isAre} not strings` });
   }
   const filledFieldsArr = filledFieldChecker(req.body);
   if (filledFieldsArr.length < 1) {
@@ -223,7 +248,7 @@ const updateBusinessValidator = (req, res, next) => {
         if (hasUser) {
           const filledFields = Object.keys(req.body).filter(element => !!req.body[element]);
           const filledFieldsObj = filledFields.reduce((acc, cur) => {
-            acc[cur] = cur;
+            acc[cur] = req.body[cur];
             return acc;
           }, {});
           req.body.filledFields = filledFieldsObj;
@@ -264,7 +289,8 @@ const removeBusinessValidator = (req, res, next) => {
       return user;
     }
   });
-  const isNotBusinessOwner = !db.Businesses.findOne({ where: { businessid, userid: decodedUser.user.userid } });
+  const isNotBusinessOwner = !db.Businesses
+    .findOne({ where: { businessid, userid: decodedUser.user.userid } });
   if (isNotBusinessOwner) {
     return res.status(403).send({
       message: 'Can not delete business, if user is not the owner of the business.'
@@ -279,10 +305,10 @@ const getAllBusinessesValidator = (req, res, next) => {
     { query: req.query.category, filter: 'CATEGORY' }];
   const filterActionArray = filterObj.filter(elm => !!elm.query).filter(elm =>
     !validator.isEmpty(elm.query.trim()));
-  if (filterActionArray < 1) {
+  if (filterActionArray.length < 1) {
     req.body.filter = '';
     next();
-  } else if (filterActionArray > 1) {
+  } else if (filterActionArray.length > 1) {
     req.body.filter = 'BOTH';
     next();
   } else {
@@ -292,17 +318,14 @@ const getAllBusinessesValidator = (req, res, next) => {
 };
 
 const addReviewValidator = (req, res, next) => {
-  let userid;
   let rating;
   let description;
   let reqBody = req.body;
   reqBody = {
-    userid,
     rating,
     description,
     ...reqBody
   };
-  const { businessid } = req.params;
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
       return err;
@@ -330,10 +353,10 @@ const addReviewValidator = (req, res, next) => {
     !validator.isEmpty(req.body.description.trim()) &&
     businessIdIsUUId
   ) {
-    db.Businesses.findOne({ where: req.params.businessid }).then((business) => {
+    db.Businesses.findOne({ where: { businessid: req.params.businessid } }).then((business) => {
       const isBusiness = !!business;
       if (isBusiness) {
-        db.Users.findOne({ where: { userid: decodedUser.user.userid}}).then((user) => {
+        db.Users.findOne({ where: { userid: decodedUser.user.userid } }).then((user) => {
           const isUser = !!user;
           if (isUser) {
             req.body.firstName = user.firstName;
