@@ -79,7 +79,7 @@ const Businesses = {
         });
       }
       business.destroy();
-      return res.status(204).send();
+      return res.status(200).send({ message: 'Business successfully deleted' });
     })
       .catch(error => res.status(400).send({
         message: error
