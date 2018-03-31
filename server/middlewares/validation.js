@@ -153,14 +153,13 @@ const registerBusinessValidator = (req, res, next) => {
   };
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
-      return err;
+      return { user: { userid: undefined } };
     } else if (!err) {
       return user;
     }
   });
-  console.log(decodedUser.user.userid)
   if (!decodedUser.user.userid) {
-    return res.status(400).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
+    return res.status(401).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
   }
   const emptyFieldsArr = emptyFieldsFinder(reqBody);
   if (emptyFieldsArr.length > 0) {
@@ -208,13 +207,13 @@ const updateBusinessValidator = (req, res, next) => {
   const { businessid } = req.params;
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
-      return err;
+      return { user: { userid: undefined } };
     } else if (!err) {
       return user;
     }
   });
   if (!decodedUser.user.userid) {
-    return res.status(400).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
+    return res.status(401).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
   }
   const isNotBusinessOwner = !db.Businesses.findOne({
     where: { businessid, userid: decodedUser.user.userid }
@@ -290,13 +289,13 @@ const removeBusinessValidator = (req, res, next) => {
   const { businessid } = req.params;
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
-      return err;
+      return { user: { userid: undefined } };
     } else if (!err) {
       return user;
     }
   });
   if (!decodedUser.user.userid) {
-    return res.status(400).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
+    return res.status(401).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
   }
   const isNotBusinessOwner = !db.Businesses
     .findOne({ where: { businessid, userid: decodedUser.user.userid } });
@@ -337,13 +336,13 @@ const addReviewValidator = (req, res, next) => {
   };
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
-      return err;
+      return { user: { userid: undefined } };
     } else if (!err) {
       return user;
     }
   });
   if (!decodedUser.user.userid) {
-    return res.status(400).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
+    return res.status(401).send({ message: 'Please check your jsonwebtoken because your user id was not found' });
   }
   const businessIdIsUUId = checkUUID(req.params.businessid);
   const emptyFields = emptyFieldsFinder(reqBody);
