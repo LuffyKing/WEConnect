@@ -153,7 +153,7 @@ const registerBusinessValidator = (req, res, next) => {
   };
   const decodedUser = jsonwebtoken.verify(req.token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
-      return { user: { userid: undefined } };
+      return { user: { userid: '' } };
     } else if (!err) {
       return user;
     }
